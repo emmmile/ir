@@ -1,6 +1,8 @@
-
 #concatena una sequenza di file
 #ordina in modo STABILE sul secondo campo
 #comprime
-cat *.final | sort -k 2,2 -s | gzip --best > allusers.gz
+cat ../i3terroni/users_timelines/Annotations/*.annotation | sort -k 2,2 -s > data/allusers/allusers.annotations
+python ./tweetsFilter.py data/allusers/allusers data/allusers/allusers.annotations
+python ./tagAnnotation.py data/allusers/alluser.newTweets data/allusers/allusers.annotations
+python ./tagMerge.py data/allusers/alluser.hashtagsUser
 
