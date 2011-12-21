@@ -2,7 +2,13 @@
 #ordina in modo STABILE sul secondo campo
 #comprime
 cat ../i3terroni/users_timelines/Annotations/*.annotation | sort -k 2,2 -s > data/allusers/allusers.annotations
+
+#filtra tutti i tweet che non sono stati annotati
 python ./tweetsFilter.py data/allusers/allusers data/allusers/allusers.annotations
+
+#crea una riga per ogni utente dove sono associate le annotazioni per ogni hashtag
 python ./tagAnnotation.py data/allusers/alluser.newTweets data/allusers/allusers.annotations
+
+#crea una riga per ogni hashtag dove sono presenti le annotazioni in ordine di frequenza
 python ./tagMerge.py data/allusers/alluser.hashtagsUser
 
