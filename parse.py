@@ -10,6 +10,11 @@ import os
 import time
 import sys
 
+"""
+Creates the 3 files list, text and hashtags from the json tweet file. I think is no more necessary.
+"""
+
+
 try:
 	import lzma
 except ImportError:

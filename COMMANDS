@@ -7,11 +7,7 @@ cat ../i3terroni/users_timelines/Annotations/*.annotation | sort -k 2,2 -s > dat
 python ./tweetsFilter.py data/allusers/allusers data/allusers/allusers.annotations
 
 #crea una riga per ogni utente dove sono associate le annotazioni per ogni hashtag
-<<<<<<< HEAD
-python ./tagAnnotation.py data/allusers/allusers.newTweets data/allusers/allusers.annotations
-=======
-python ./tagAnnotation.py data/allusers/alluser.newTweets data/allusers/allusers.annotations
->>>>>>> 75c3a16b5ed3ab55d3b85d57f71cefaa45b8c00a
+python ./hashtagAnnotation.py data/allusers/allusers.newTweets data/allusers/allusers.annotations
 
 #crea una riga per ogni hashtag dove sono presenti le annotazioni in ordine di frequenza
 python ./tagMerge.py data/allusers/alluser.hashtagsUser
