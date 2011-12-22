@@ -42,9 +42,9 @@ class tagAnnotation(object):
 				result = dict()			# creo un dizionario che ha annotazioni come chiavi
 								# e numero di tweet come valori
 				for a in hashtagAnn[t]:
-					key, rho = a.split('@')
-					result[key] = result.setdefault( key, 0.0 ) + float(rho)
-					#result[a] = result.setdefault( a, 0 ) + 1
+					#key, rho = a.split('@')
+					#result[key] = result.setdefault( key, 0.0 ) + float(rho)
+					result[a] = result.setdefault( a, 0 ) + 1
 								# sommo 1 se trovo l'annotazione a
 				
 				resultList = []
@@ -52,7 +52,8 @@ class tagAnnotation(object):
 								# di stringhe "frequenza annotazione" che poi viene scritto su file
 					resultList.append( str( result[el] ) + ' ' + el )
 				
-				self.outFile.write(" {0} {1}".format(t, ' '.join( resultList ) ) )
+				#ogli coppia "frequenza annotazione" e' separata da |
+				self.outFile.write(" {0} {1}".format(t, '|'.join( resultList ) ) )
 		self.outFile.write("\n")
 
 
@@ -76,7 +77,8 @@ class tagAnnotation(object):
 			if len(tags) == 0 :
 				continue
 				
-			annotations = re.findall('#[@\w\.]+', annotation_tweet)	#prende le annotazioni
+			#annotations = re.findall('#[@\w\.]+', annotation_tweet)	#prende le annotazioni
+			annotations = re.findall('#[^#]+', annotation_tweet)
 			annotations = map( lambda x: x[1:], annotations )	#toglie magicamente il cancelletto
 			if userID_old == "":					#controlla se e' la prima iterazione
 				hashtagAnn = dict()

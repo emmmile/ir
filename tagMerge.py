@@ -31,11 +31,11 @@ class tagMerge(object):
 			for t in tags[1:]:				#toglie l'userID e itera su "tag (frequenza annotazione)+"
 				hashtag = t.split( None, 1 )[0]		#prende "tag"
 				
-				for pair in re.findall( '[\.\d]+ \d+', t ):	#itera sulle coppie "frequenza annotazione"
-					couple = pair.split()
+				for pair in re.findall( '[\.\d]+ [^|]+', t ):	#itera sulle coppie "frequenza annotazione"
+					couple = pair.split( None, 1 )
 					an = couple[1]			#prende l'annotazione
-					#freq = int( couple[0] )	#prende la frequenza
-					freq = float( couple[0] )
+					freq = int( couple[0] )	#prende la frequenza
+					#freq = float( couple[0] )
 					
 					if hashtag not in self.hashtags:	#non esiste hashtag nel dizionario
 						#il primo elemento della coppia e' il numero di utenti che ha usato
