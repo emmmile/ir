@@ -4,16 +4,18 @@
 import os
 import re
 import sys
-import codecs			
+import codecs	
+from optparse import OptionParser #deprecated in 2.7 or newer
 
 
 class tagMerge(object):
 
-	def __init__(self, filename):
+	def __init__(self, filename, onlyImportant):
 		self.filename = filename
 		name, ext = os.path.splitext(filename)
 		self.outFilename = name + ".hashtags"
 		self.hashtags = dict()
+		self.important = onlyImportant
 
 	def parse(self):
 		self.inFile = open(self.filename)
@@ -59,10 +61,21 @@ class tagMerge(object):
 	def print_data(self):
 		sortedHashtags = sorted( self.hashtags )
 		for h in sortedHashtags:
-			self.outFile.write( "#" + h )
-			sortedAnnotations = sorted( self.hashtags[h].keys(), key=lambda x: -self.hashtags[h][x][1] )
+			totalTweets = 0
+			if self.important:
+				for a in self.hashtags[h]:	# quante volte e' stato usato questo hashtag?
+					totalTweets += self.hashtags[h][a][1]
 			
-			for a in sortedAnnotations:
+			if self.important and totalTweets < 5000:	#continuo solo se e' stato usato almeno 10000 volte
+				continue
+			
+			
+			self.outFile.write( "#" + h.ljust(20) )
+			# ordina le annotazioni in base al numero di utenti
+			sortedAnnotations = sorted( self.hashtags[h].keys(), key=lambda x: -self.hashtags[h][x][0] )
+			
+			# stampo al massimo 20 annotazioni se important e' settato a True
+			for a in sortedAnnotations[: (20 if self.important else len( sortedAnnotations ))]:
 				self.outFile.write( ' ' + a + ' f=' + str( self.hashtags[h][a][1] ) + ' u=' + str( self.hashtags[h][a][0] ) )
 
 			self.outFile.write( '\n' )	
@@ -70,6 +83,12 @@ class tagMerge(object):
 
 
 if __name__ == '__main__':
-	filename = sys.argv[1]
-	parser = tagMerge(filename)
-	parser.parse()
+	parser = OptionParser("Usage: ./hashtagMerge.py [options] FILE")
+	parser.add_option('-o','--onlyimportant', action='store_true', default=False, help="flag used to print only most important tags.")
+	(options, args) = parser.parse_args( sys.argv )
+	if len( args ) != 2:
+		parser.error( "Incorrect number of arguments." )
+	
+	tagger = tagMerge( args[1], options.onlyimportant )
+	tagger.parse()
+
