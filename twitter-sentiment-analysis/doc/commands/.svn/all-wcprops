@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/!svn/ver/49/trunk/doc/commands
+END
+CalculateWmPrecisionCommand.html
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/49/trunk/doc/commands/CalculateWmPrecisionCommand.html
+END
+Command.html
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/49/trunk/doc/commands/Command.html
+END
+ConstructCommand.html
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/49/trunk/doc/commands/ConstructCommand.html
+END
+package-frame.html
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/49/trunk/doc/commands/package-frame.html
+END
+package-use.html
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/49/trunk/doc/commands/package-use.html
+END
+package-summary.html
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/49/trunk/doc/commands/package-summary.html
+END
+ConstructWmCommand.html
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/49/trunk/doc/commands/ConstructWmCommand.html
+END
+package-tree.html
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/49/trunk/doc/commands/package-tree.html
+END
+PrepareTrainCommand.html
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/49/trunk/doc/commands/PrepareTrainCommand.html
+END

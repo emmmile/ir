@@ -29,12 +29,14 @@ class tagMerge(object):
 		for line in self.inFile:
 			tags = line.split( ' #' )			#userID (#tag (frequenza annotazione)+)+
 			for t in tags[1:]:				#toglie l'userID e itera su "tag (frequenza annotazione)+"
-				hashtag = t.split( None, 1 )[0]		#prende "tag"
+				tmp = t.split( None, 1 )
+				hashtag = tmp[0]			#prende "tag"
 				
-				for pair in re.findall( '[\.\d]+ [^|]+', t ):	#itera sulle coppie "frequenza annotazione"
+				#for pair in re.findall( '[\.\d]+ [^|]+', tmp[1] ):	#itera sulle coppie "frequenza annotazione"
+				for pair in tmp[1].split('|'):
 					couple = pair.split( None, 1 )
-					an = couple[1]			#prende l'annotazione
-					freq = int( couple[0] )	#prende la frequenza
+					an = couple[1].rstrip()		#prende l'annotazione
+					freq = int( couple[0] )		#prende la frequenza
 					#freq = float( couple[0] )
 					
 					if hashtag not in self.hashtags:	#non esiste hashtag nel dizionario
@@ -57,7 +59,7 @@ class tagMerge(object):
 	def print_data(self):
 		sortedHashtags = sorted( self.hashtags )
 		for h in sortedHashtags:
-			self.outFile.write( h )
+			self.outFile.write( "#" + h )
 			sortedAnnotations = sorted( self.hashtags[h].keys(), key=lambda x: -self.hashtags[h][x][1] )
 			
 			for a in sortedAnnotations:

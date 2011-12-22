@@ -1,0 +1,89 @@
+K 25
+svn:wc:ra_dav:version-url
+V 28
+/svn/!svn/ver/51/trunk/files
+END
+pos.txt
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/!svn/ver/51/trunk/files/pos.txt
+END
+train_doc.txt
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/51/trunk/files/train_doc.txt
+END
+weka.classifiers.trees.J48.model
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/51/trunk/files/weka.classifiers.trees.J48.model
+END
+stopwords.txt
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/51/trunk/files/stopwords.txt
+END
+test_doc.txt
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/svn/!svn/ver/51/trunk/files/test_doc.txt
+END
+weka.classifiers.bayes.NaiveBayes.model
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/51/trunk/files/weka.classifiers.bayes.NaiveBayes.model
+END
+weka.classifiers.functions.VotedPerceptron.model
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/51/trunk/files/weka.classifiers.functions.VotedPerceptron.model
+END
+test_base.txt
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/51/trunk/files/test_base.txt
+END
+neg.txt
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/!svn/ver/51/trunk/files/neg.txt
+END
+train1.arff
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/51/trunk/files/train1.arff
+END
+train.txt
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/51/trunk/files/train.txt
+END
+weka.classifiers.functions.MultilayerPerceptron.model
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/51/trunk/files/weka.classifiers.functions.MultilayerPerceptron.model
+END
+test1.arff
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/51/trunk/files/test1.arff
+END
+wlsvm.WLSVM.model
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/!svn/ver/51/trunk/files/wlsvm.WLSVM.model
+END

@@ -23,7 +23,11 @@ def replace( reMatchObject ):
 	return out
 
 def toUnicode( line ):
+	#try:
 	return re.sub( "&#\w+;", replace, line )
+	#except UnicodeDecodeError:
+	#	print(line)
+	#	sys.exit()
 
 
 if __name__ == '__main__':

@@ -53,7 +53,7 @@ class tagAnnotation(object):
 					resultList.append( str( result[el] ) + ' ' + el )
 				
 				#ogli coppia "frequenza annotazione" e' separata da |
-				self.outFile.write(" {0} {1}".format(t, '|'.join( resultList ) ) )
+				self.outFile.write( unicode(" {0} {1}".format(t, '|'.join( resultList ) ), 'utf-8') )
 		self.outFile.write("\n")
 
 
@@ -69,17 +69,19 @@ class tagAnnotation(object):
 			if counter % 10000 == 0:
 				print( "Read {0} lines (current user: {1}).".format( counter, userID_old ) )
 			
-			text_tweet = toUnicode.toUnicode(text_tweet) 		#chiamo la funzione per convertire
+			#XXX non ha nessun senso convertire a unicode (filtrando eventuali codici html) se l'annotazione
+			#e' gia' stata lanciata su questo file "sporco".. Al limite l'annotazione dovrebbe essere lanciata
+			#dopo aver pulito il testo
+			#text_tweet = toUnicode.toUnicode(text_tweet) 		#chiamo la funzione per convertire
 			time, userID, text = text_tweet.split(None, 2) 		#None spezza sui caratteri bianchi
 			tags = re.findall('#\w+', text.lower() )		#prendo gli hashtags
-			
 			
 			if len(tags) == 0 :
 				continue
 				
 			#annotations = re.findall('#[@\w\.]+', annotation_tweet)	#prende le annotazioni
 			annotations = re.findall('#[^#]+', annotation_tweet)
-			annotations = map( lambda x: x[1:], annotations )	#toglie magicamente il cancelletto
+			annotations = map( lambda x: x[1:].rstrip(), annotations )	#toglie magicamente il cancelletto
 			if userID_old == "":					#controlla se e' la prima iterazione
 				hashtagAnn = dict()
 				userID_old = userID

@@ -10,6 +10,6 @@ python ./tweetsFilter.py data/allusers/allusers data/allusers/allusers.annotatio
 python ./hashtagAnnotation.py data/allusers/allusers.newTweets data/allusers/allusers.annotations
 
 #crea una riga per ogni hashtag dove sono presenti le annotazioni in ordine di frequenza
-python ./tagMerge.py data/allusers/alluser.hashtagsUser
+python ./hashtagMerge.py data/allusers/alluser.hashtagsUser
 
 
