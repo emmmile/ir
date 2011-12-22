@@ -1,2 +1,4 @@
+Macano da eseguire gli ultimi due comandi del file "commands" ma danno errori e ora è tardi Notte
+
 Noi abbiamo annotati i tweets contenenti anche le hrl... it's good? No!
 Noi non ci memorizziamo se il tweet è italiano o inglese ... 
