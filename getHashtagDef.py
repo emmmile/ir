@@ -29,14 +29,14 @@ class GetTagdef(object):
 			response_stream.close()
 
 			for d in jsonTag['defs']:	# get the defs objects
-				tagDef.append(d['def']['text']) #aggiunge una def
+				tagDef.append((d['def']['text']).rstrip().replace("\n"," ").replace("\r"," ")) #aggiunge una def
 			return tagDef
 
 	def getTags(self, filename):
 		tags = []
 		for line in filename:
 			token = line.split(' ',1)
-			tags.append(token[0])
+			tags.append(token[0][1:])
 		return tags
 
 	def searchDef(self):
@@ -46,7 +46,7 @@ class GetTagdef(object):
 		for t in tags:
 			if self.tagRequest(t):
 				definitions = list(enumerate(self.tagRequest(t))) #lista di tuple (count "i" , value in pos "i")
-				def_filename.write(u" {0} {1}\n".format(t, ' '.join( map(lambda x: str(x[0]) + ") "+ x[1], definitions) )))
+				def_filename.write(u" {0} {1}\n".format(t, ' '.join( map(lambda x: str(x[0]) + "}"+ x[1], definitions) )))
 		filename.close()
 		def_filename.close()
 		self.err.close()

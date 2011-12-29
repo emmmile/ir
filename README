@@ -44,7 +44,7 @@ tagMerge.py		Takes as input a hashtagUser file [produced by tagAnnotation.py] an
 GetTagdef.py		Takes as input a file in format (hashtag qualsiasicosa), creates a list of tags,
 			requests definitions of tags to remote server and writes a file, in format:
 
-				file.tagdef		hashtag ( i) hashtagdef )+ 
+				file.tagdef		hashtag ( i} hashtagdef )+ 
 
 =========================================================================================================
 
@@ -58,7 +58,11 @@ TweetFilter.java	Should take as input the annotated tweet file and filter it lea
 
 =========================================================================================================
 
-TweetAnnotation.java	Same as TweetAnnotation.java of paurullan.
+TweetAnnotation.java	TweetAnnotation.java of paurullan, modified for considered only significant annotation
+
+=========================================================================================================
+
+TagDefAnnotation.java	Annotation of TwitterUser's definition on "http://tagdef.com/"
 
 =========================================================================================================
 
