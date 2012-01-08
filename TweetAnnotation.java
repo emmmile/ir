@@ -56,7 +56,7 @@ public class TweetAnnotation {
 		            		// stampo soltanto un intero che rappresenta il token e la sua "affidabilita'"
 		            		// penso che cosi' dopo sia piu' facile da gestire / ordinare
 		              		//annot_output += " # " + a.getRho() + " " + a.getSense();//+ as.getTitleByDoc(a.getSense());
-		            		annot_output += "#" + a.getSense() + "@" + a.getRho();
+		            		annot_output += "#" + as.getTitleByDoc(a.getSense()) + "@" + a.getRho();
 				}
 		            }
 		        }

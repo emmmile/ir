@@ -4,7 +4,7 @@
 import os
 import re
 import sys
-import codecs	
+import codecs
 from optparse import OptionParser #deprecated in 2.7 or newer
 
 
@@ -12,21 +12,16 @@ class tagMerge(object):
 
 	def __init__(self, filename, onlyImportant):
 		self.filename = filename
-		name, ext = os.path.splitext(filename)
-		self.outFilename = name + ".hashtags"
-		self.hashtags = dict()
+		self.hashtags = dict()		# mapping hashtag -> topics
+		self.topics = dict()		# mapping topic -> hashtags
 		self.important = onlyImportant
 		self.totalUsers = 0
 		self.totalTweets = 0
 
 	def parse(self):
 		self.inFile = open(self.filename)
-		self.outFile = open(self.outFilename, 'w')
-		
 		self.parse_data()
-
 		self.inFile.close()
-		self.outFile.close()
 
 	def parse_data(self):
 		print( "Merging hashtag informations from {0}...".format(self.filename) )
@@ -59,39 +54,63 @@ class tagMerge(object):
 							self.hashtags[hashtag][an][1] += freq
 						else:	self.hashtags[hashtag][an] = [1,freq]	#non esiste an per l'hashtag "hashtag"
 	
-		print( "Done [total users: {0}, total tweets: {1}].\nNow saving...".format( self.totalUsers, self.totalTweets ) )
-		self.print_data()
-		print( "Saved." )
+		print( "Done [total users: {0}, total tweets: {1}].\nNow inverting...".format( self.totalUsers, self.totalTweets ) )
+		self.invert()
+		print( "Inverted [total topics: {0}].\nNow saving...".format( len( self.topics ) ) )
+		self.print_data( self.hashtags, ".hashtags", '#', '' )
+		self.print_data( self.topics, ".topics", '', '#' )
+		
+	def invert( self ):
+		for h in self.hashtags:				# scorro gli hashtags
+			for t in self.hashtags[h]:		# scorro i topic e gli aggiungo al dizionario
+				# ad ogni topic viene associato un dizionario di hashtags.
+				# ad ogni hashtag vengono associate le stesse informazioni di prima (utenti/frequenza)
+				if t not in self.topics:
+					self.topics[t] = dict()
+					self.topics[t][h] = self.hashtags[h][t]
+				else:
+					if h in self.topics[t]:
+						self.topics[t][h][0] += self.hashtags[h][t][0]
+						self.topics[t][h][1] += self.hashtags[h][t][1]
+					else:
+						self.topics[t][h] = self.hashtags[h][t]
+		
+		
 	
-	def print_data(self):
-		sortedHashtags = sorted( self.hashtags )
+	def print_data( self, dictionary, fileSuffix, keyPrefix, valuePrefix ):
+		name, ext = os.path.splitext(self.filename)
+		out = open( name + fileSuffix, 'w')
+		
+		sortedHashtags = sorted( dictionary )
 		for h in sortedHashtags:
 			totalTweets = 0
 			totalUsers = 0
 			if self.important:
-				for a in self.hashtags[h]:	# quante volte e' stato usato questo hashtag?
-					totalTweets += self.hashtags[h][a][1]
-					totalUsers += self.hashtags[h][a][0]
+				for a in dictionary[h]:	# quante volte e' stato usato questo hashtag?
+					totalTweets += dictionary[h][a][1]
+					totalUsers += dictionary[h][a][0]
 			
 			#if self.important and totalTweets < 5000:	#continuo solo se e' stato usato almeno 10000 volte
 			#	continue
-			if totalUsers < 0.05 * self.totalUsers and totalTweets < 0.05 * self.totalTweets:
+			if self.important and totalUsers < 0.05 * self.totalUsers and totalTweets < 0.05 * self.totalTweets:
 				continue
 			
-			self.outFile.write( "#" + h.ljust(20) )
+			out.write( keyPrefix + h )
 			# ordina le annotazioni in base al numero di utenti
-			sortedAnnotations = sorted( self.hashtags[h].keys(), key=lambda x: -self.hashtags[h][x][0] )
+			sortedAnnotations = sorted( dictionary[h].keys(), key=lambda x: -dictionary[h][x][0] )
 			
 			printed = 0
 			# stampo le annotazioni fino a quando non ho considerato il 60% dei tweets
 			for a in sortedAnnotations:
-				self.outFile.write( ' ' + a + ' f=' + str( self.hashtags[h][a][1] ) + ' u=' + str( self.hashtags[h][a][0] ) )
-				printed += self.hashtags[h][a][1]
-				if printed >= 0.4 * totalTweets:
-					break
+				out.write( ' ' + valuePrefix + a + ' f=' + str( dictionary[h][a][1] ) + ' u=' + str( dictionary[h][a][0] ) )
+				if self.important:
+					printed += dictionary[h][a][1]
+					if printed >= 0.2 * totalTweets:
+						break
 
-			self.outFile.write( '\n' )	
-
+			out.write( '\n' )
+		
+		out.close()
 
 
 if __name__ == '__main__':

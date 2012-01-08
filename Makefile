@@ -2,10 +2,9 @@ C=javac
 
 J=java -Xmx2G
 
-all: filter
+all: 
+	$C *.java
 
-filter:
-	$C TweetFilter.java
-	$C TweetAnnotation.java
-	$C AnchorSearcher.java
+clean:
+	-rm *.class
 
