@@ -37,6 +37,9 @@ Emilio Del Tessandoro 412888, Chiara Marcheschi 303756, \today
 \section{Introduction}
 \label{sec:intro}
 
+\subsection{Two datasets}
+We had at our disposal two dataset, the one given with the text of the project (and described in the slides) and another one downloaded by the group composed by Daniele De Sensi, Andrea Cicalese and Francesco Piccinno.
+
 
 \section{The users graph}
 Here we wanted analyse the structure of the users graph. In particular we are interested in finding the users that follows more than one politician. For this purpose we ``inverted'' the graph file given in the first data set: instead of having for every politician the list of users that are him followers, we create, for every user, the list of politicians followed by that user.
@@ -60,17 +63,30 @@ So we have a list of pairs \textit{(user, list of politicians)}, that can be eas
 \caption{Statistics of the users of the first dataset. Remember that the total number of politicians is 7. We curiously found that the politician 14078646 follows the politician 19067940.}
 \end{figure}
 
-This part has been developed in python.
+This part has been developed in python (see script \texttt{graph.py}).
 
 \section{Hashtags}
 
 \subsection{Giving a meaning to an hashtag}
-We used \href{http://tagme.di.unipi.it/}{TAGME} to give hashtags a meaning. We annotated each tweet with TAGME and...
+We tried to use \href{http://tagme.di.unipi.it/}{TAGME} to give hashtags a meaning, that is associating to each hashtag a list of topics that can be taken as its ``decription''. For this purpose we used the tweets from the users of the second dataset.
+In particular we performed the following steps:
+\begin{enumerate}
+\item Select only tweets that contains at least an hashtag. This has been done with a simple bash command.
+\item Filter only tweets that has at least one annotation. This has been done with the script \texttt{tweetsFilter.py}, which opens both the tweet file and the annotated one, discarding tweets with no annotation in the second file.
+\item Collect for every user all the pairs (hashtag, (annotation)+), that means what topics the user used in correspondence of a certain hashtag. Actually we also stored a weight for every annotation, that could be in practice the number of times the pair (hashtag, annotation) has been used by that user, or sum of the \textit{rho}s of these annotations. For furter details see the script \texttt{hashtagAnnotation.py}.
+\item Merge all the informations produced above, creating a unique association (hashtag, (annotation)+), summing up the contributions of every user. This has been done with the script \texttt{hashtagMerge.py}.
+\end{enumerate}
+
+The last two points could have been realized in one single step, but for simplicity and further extensions we preferred to keep the two parts separated.
+
+Notice that as we built associations of the type (hashtag, (annotation)+) we can easily ``invert'' this if we want to manage (annotation, (hashtag)+) pairs, as we done in section \ref{sec:tagger}.	
+
 
 \subsection{Other meanings}
 We download some hashtag semantic from \href{http://tagdef.com/}{tagdef.com}..
 
 \subsection{Tagger}
+\label{sec:tagger}
 With the informations collected by the TAGME annotation, we built a little program that, taken a phrase as input, suggest a set of possible hashtags that could describe the topics in that phrase.
 
 \section{Sentiment Analysis}
