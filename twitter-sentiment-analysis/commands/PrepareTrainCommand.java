@@ -25,6 +25,7 @@ public class PrepareTrainCommand implements Command{
 	public void execute() {
 		try {
 			clb.prepareTrain();
+			clb.prepareTest();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -40,25 +40,25 @@ public class ArffFileCreator {
 		while(i<_ds.getFeat().getI2f().size()) {
 			s = _ds.getFeat().getI2f().get(i).replaceAll("'", "_APOSTROPHE_");
 			s = s.replaceAll(",", "_COMMA_");
-			write.println("@attribute " + s + " {0,1}");
+			write.println("@attribute " + s + " {0,1}"); //sanno solo loro perché
 			i++;
 		}
-		write.println("@attribute polarity {0,4}");
+		write.println("@attribute polarity NUMERIC"); //NUMERIC
 		write.println("@data");
 		i = 0;
 		List<Integer> doc = new LinkedList<Integer>();
 		while(i<_ds.getD2f_train().size()) {
-			doc = _ds.getD2f_train().get(i);
+			doc = _ds.getD2f_train().get(i); //gets a map for train that associates a tweet's id to a list of terms's id
 			write.print("{");
 			for (Integer num : doc) {
-				if(_ds.getFeat().getI2f().get(num)!=null)
+				if(_ds.getFeat().getI2f().get(num)!=null) //feature's id to a string
 					write.print(num + " 1, ");
 			}
 			String pol = _ds.getPols().get(i);
-			if(pol.compareTo("0")!=0)
-				pol = "4";
-			write.println(_ds.getFeat().getF2i().size() + " " + pol + "}");
-			i++;
+			//if(pol.compareTo("0")!=0) non più solo 0 e 4
+			//	pol = "4";
+			write.println(_ds.getFeat().getF2i().size() + " " + pol + "}");// ogni riga sarà un tweet con id relativi termini, seguiti da 1 
+			i++;															// l'ultimo numero è la polarità zero o quattro
 		}
 	}
 	
@@ -79,7 +79,7 @@ public class ArffFileCreator {
 			write.println("@attribute " + s + " {0,1}");
 			i++;
 		}
-		write.println("@attribute polarity {0,4}");
+		write.println("@attribute polarity NUMERIC"); // invece di {0,4} ho messo NUMERIC
 		write.println("@data");
 		i = 0;
 		List<Integer> doc = new LinkedList<Integer>();
@@ -91,8 +91,8 @@ public class ArffFileCreator {
 					write.print(num + " 1, ");
 			}
 			String pol = _ds.getPols().get(i);
-			if(pol.compareTo("0")!=0)
-				pol = "4";
+			//if(pol.compareTo("0")!=0)
+			//	pol = "4";
 			write.println(_ds.getFeat().getF2i().size() + " " + pol + "}");
 			i++;
 		}

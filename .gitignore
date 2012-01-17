@@ -3,6 +3,8 @@ data/*
 *.class
 nohup.out
 
+twitter-sentiment-analysis/files
+
 
 
 # here I reinclude some example files that are useful (and small)

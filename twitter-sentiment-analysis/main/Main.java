@@ -72,11 +72,13 @@ public class Main {
 			if(args.length>2 && (args[2].equals("-re") || args[2].equals("-sf")))
 				opt.setRemoveEmoticons(true);
 			inv.prepareTrain();
+			System.out.println("Fine prepareTrain!");
 		} else if(args[0].equals("construct")) {
 			opt.setClassifierName(args[1]);
 			if(args.length>2)
 				opt.setNumFeatures(Integer.parseInt(args[2]));
 			inv.construct();
+			System.out.println("Fine construct!");
 		} else if(args[0].equals("weightedMajority")) {
 			int i = 1;
 			opt.setWmClassifiersName(new LinkedList<String>());
@@ -85,6 +87,7 @@ public class Main {
 				i++;
 			}
 			inv.constructWm();
+			System.out.println("Fine weightedMajority!");
 		} else if (args[0].equals("evaluateWm")) {
 			int i = 1;
 			opt.setWmClassifiersName(new LinkedList<String>());
@@ -93,6 +96,7 @@ public class Main {
 				i++;
 			}
 			inv.calculateWmPrecision();
+			System.out.println("Fine evaluateWm!");
 		}
 	}
 }

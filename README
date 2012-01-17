@@ -26,7 +26,7 @@ parse.py		Takes as input a tweet file (see slides for the format) and returns a 
 		
 =========================================================================================================
 
-tagAnnotation.py	Takes as input a tweet file (time userID textWithHashtag)
+hashtagAnnotation.py	Takes as input a tweet file (time userID textWithHashtag)
 			and a annotation file (time userID (#annotationID@freq)+)
 			and returns a file which rows have the format:
 
@@ -91,10 +91,6 @@ commands		appends a chain of file, sorts "in modo STABILE" considering the secon
 
 =========================================================================================================
 
-File.info		Describe formats of differents files in ./data folder
-
-=========================================================================================================
-
-zzzDubbi.txt		Questions to share
+DUBBI		Questions to share
 
 

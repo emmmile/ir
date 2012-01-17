@@ -53,10 +53,10 @@ public class ClassifierBuilder {
 	 * @throws IOException
 	 */
 	public void prepareTrain() throws IOException {
-		_ds.createFilePreprocessed("files/train.txt", "files/train_doc.txt", opt);
+		_ds.createFilePreprocessed("files/train.txt", "files/train_doc.txt", opt); 		//"files/train.txt" input , "files/train_doc.txt" output
 		_ds.createIndexTrain("files/train_doc.txt");
 		if(this.opt.isSelectedFeaturesByFrequency())
-			_ds.getFeat().selectFeaturesByFrequency(2);
+			_ds.getFeat().selectFeaturesByFrequency(2); /////////////////////// i termine è considerato se appare almeno due volte
 		ArffFileCreator fc = new ArffFileCreator();
 		fc.setDs(_ds);
 		fc.createArff_train("files/train1.arff");
