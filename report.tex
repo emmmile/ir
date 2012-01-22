@@ -38,7 +38,15 @@ Emilio Del Tessandoro 412888, Chiara Marcheschi 303756, \today
 \label{sec:intro}
 
 \subsection{Two datasets}
-We had at our disposal two dataset, the one given with the text of the project (and described in the slides) and another one downloaded by the group composed by Daniele De Sensi, Andrea Cicalese and Francesco Piccinno.
+We had at our disposal two dataset, the one given with the text of the project (and described in the slides) which consists of three files:
+\begin{enumerate}
+\item Users file, containing informations about 170000 users that are followers of 7 given italian politicians.
+\item Tweets file, containing a number of tweets from the users in the previous file.
+\item Graph file, containing the associations user-politician (which users follow a given politician).
+\end{enumerate}
+Other information on this files and the format of each one can be found in the slides.
+
+The other dataset has been downloaded by the group composed by Daniele De Sensi, Andrea Cicalese and Francesco Piccinno (so refer to them report for other details), and we used in particular the tweets of the users, not the politicians.
 
 
 \section{The users graph}
@@ -60,7 +68,7 @@ So we have a list of pairs \textit{(user, list of politicians)}, that can be eas
 	& (+7 politicians)\\ %\hline
 	\end{tabular}
 \end{center}
-\caption{Statistics of the users of the first dataset. Remember that the total number of politicians is 7. We curiously found that the politician 14078646 follows the politician 19067940.}
+\caption{Statistics of the users of the first dataset. Remember that the total number of politicians is 7. We curiously found that the politician 14078646 (Idvstaff) follows the politician 19067940 (beppe\_grillo).}
 \end{figure}
 
 This part has been developed in python (see script \texttt{graph.py}).
