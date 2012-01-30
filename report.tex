@@ -10,6 +10,9 @@
 \usepackage[small,bf]{caption}
 
 
+\DeclareMathOperator{\score}{score}
+
+
 \hypersetup{
     colorlinks=true,       % false: boxed links; true: colored links
     linkcolor=red,          % color of internal links
@@ -37,8 +40,10 @@ Emilio Del Tessandoro 412888, Chiara Marcheschi 303756, \today
 \section{Introduction}
 \label{sec:intro}
 
+TODO.
+
 \subsection{Two datasets}
-We had at our disposal two dataset, the one given with the text of the project (and described in the slides) which consists of three files:
+We had at our disposal two dataset, the one given with the text of the project (and well described in the slides) which consists of three files:
 \begin{enumerate}
 \item Users file, containing informations about 170000 users that are followers of 7 given italian politicians.
 \item Tweets file, containing a number of tweets from the users in the previous file.
@@ -75,34 +80,89 @@ This part has been developed in python (see script \texttt{graph.py}).
 
 \section{Hashtags}
 
-\subsection{Giving a meaning to an hashtag}
-We tried to use \href{http://tagme.di.unipi.it/}{TAGME} to give hashtags a meaning, that is associating to each hashtag a list of topics that can be taken as its ``decription''. For this purpose we used the tweets from the users of the second dataset.
-In particular we performed the following steps:
+%\subsection{Giving a meaning to an hashtag}
+We tried to use \href{http://tagme.di.unipi.it/}{TAGME} to give hashtags a meaning, that is associating to each hashtag a list of topics that can be taken as its ``decription''. We also wanted to rank these topics, for every tag. For this purpose we used the tweets from the users of the second dataset.
+
+We proceeded in the following steps:
+
 \begin{enumerate}
 \item Select only tweets that contains at least an hashtag. This has been done with a simple bash command.
 \item Filter only tweets that has at least one annotation. This has been done with the script \texttt{tweetsFilter.py}, which opens both the tweet file and the annotated one, discarding tweets with no annotation in the second file.
-\item Collect for every user all the pairs (hashtag, (annotation)+), that means what topics the user used in correspondence of a certain hashtag. Actually we also stored a weight for every annotation, that could be in practice the number of times the pair (hashtag, annotation) has been used by that user, or sum of the \textit{rho}s of these annotations. For furter details see the script \texttt{hashtagAnnotation.py}.
-\item Merge all the informations produced above, creating a unique association (hashtag, (annotation)+), summing up the contributions of every user. This has been done with the script \texttt{hashtagMerge.py}.
+\item Collect for every user all the pairs $(h,a)$, where $h$ is an hashtag and $a$ an annotation. If for user $u$ exist such a pair, means that $u$ wrote some tweets where $h$ appear as hashtag, and these tweets are annotated with $a$. How many times? For each pair actually we also stored a weight $w_{u,h,a}$ that can be in practice the number of times the pair $(h,a)$ has been used by $u$. In a second approach $w_{u,h,a}$ can also be the sum of the \textit{rho}s of the annotations we are talking about (instead of the raw tweet count). For furter details see the script \texttt{hashtagAnnotation.py}.
+\item Merge all the informations produced above, creating a unique association $(h,a)$, summing up the contributions of the various users. This has been done with the script \texttt{hashtagMerge.py}. Here the annotations are sorted by their importance, as explained in section \ref{sec:merge} (also here to each pair is given a weight, or better a score).
 \end{enumerate}
 
 The last two points could have been realized in one single step, but for simplicity and further extensions we preferred to keep the two parts separated.
 
-Notice that as we built associations of the type (hashtag, (annotation)+) we can easily ``invert'' this if we want to manage (annotation, (hashtag)+) pairs, as we done in section \ref{sec:tagger}.	
+Notice that as we built associations of the type $(h,a)$ we can easily ``invert'' this if we want to manage $(a,h)$ pairs, as we done in section \ref{sec:tagger}.
 
+\subsection{How the merge works}
+\label{sec:merge}
+One foundamental step in the previous procedure is how to merge togheter informations coming from different users into a single score. There are two possible score measures that are very simple to calculate and give a base for furter reasoning on this part. They are, for a fixed pair $(h, a)$ (hashtag, annotation):
+\begin{enumerate}
+\item the user count $u_{h,a}$, that is simply the number of user that used the pair $(h,a)$ in at least one tweet, indifferently from the number of these tweets.
+\item the total number of tweets where the $(h,a)$ pair is used, disregaring any information about the users (i.e. the previous indicator). We will indicate this number with $f_{h,a}$ This can be easily calculated if $w_{u,h,a}$ simply represent the number of tweets written by $u$ where the pair $(h,a)$ is used.
+\item the total sum of the \textit{rho}s if $w_{u,h,a}$ is instead based on a $\rho$-weighting. This number will be indicated with $\sigma_{h,a}$ in the following part.
+\end{enumerate}
+
+It's clear that last two measures are strongly related, and in general they are equal except for a constant factor (TODO: e' vero?). So how to combine these possibilities in a single score?
+Some observations:
+
+\begin{itemize}
+\item $u_{h,a}$ is important.
+\item $f_{h,a}$ (or $\sigma_{h,a}$) shouldn't be negligible.
+\item the number of messages written by $u$ can be a factor to normalize $f_{h,a}$ (or $\sigma_{h,a}$), in order to get a measure that is closer to $u_{h,a}$.
+\end{itemize}
+
+Conclusion: the score must increase with $f_{h,a}$ (or $\sigma_{h,a}$). A simple example of this reasoning can be expressed as follows:
+
+\begin{equation}
+\score (h,a) = \sum_{u} \log \left(  w_{u,h,a} \right) 
+\end{equation}
+
+TODO provarla e fare degli esempi. TODO, chiara pensi vada bene?
 
 \subsection{Other meanings}
-We download some hashtag semantic from \href{http://tagdef.com/}{tagdef.com}..
+We download some hashtag semantic from \href{http://tagdef.com/}{tagdef.com}.. TODO
 
 \subsection{Tagger}
 \label{sec:tagger}
 With the informations collected by the TAGME annotation, we built a little program that, taken a phrase as input, suggest a set of possible hashtags that could describe the topics in that phrase.
 
 \section{Sentiment Analysis}
+The basic idea we wanted to develop here is to calculate similarity between users and politicians. The naive approach consist in making a comparison in the terms/topics used by them, but this does not take in consideration in \textit{which way} a user speak about something.
+
+\begin{figure}[h]
+\centering{
+\begin{tabular}{l}
+%\hline
+Berlusconi \`e veramente il peggior presidente del consiglio di tutti i tempi.\\
+\hline
+Berlusconi: ``sono il miglior presidente del consiglio dalla seconda guerra mondiale''.\\ 
+%\hline
+\end{tabular}
+}
+\caption{An example of two phrases that, despite having many common terms, describe very different messages.
+Also using TAGME we can't resolve this problem, and a program that calculates user similarity only with these informations will not get the differences in the two expressions.}
+\end{figure}
+
+We need in other words, informations about the sentiment of a user when speaking of a certain topic. This is often called \textit{polarity} and can be represented numerically in many ways, some of them: 
+\begin{itemize}
+\item a single value $p$, and therefore if $p < 0$ the message is negative for a certain topic, neutral if $p = 0$, positive if $p > 0$. Of course these transitions can be represented countinously with a real number.
+\item with two positive values $(p,n)$, the first representing positivity and the second negativity.
+\item same as the previous but with another value indicating neutrality.
+\end{itemize}
+
+Of course all these approaches are possible, and the one to choose mainly depends on the application. We will discuss in a subsequent section how we can use an information like this to calculate similarity between users.
+
+We want only to add that such a tool is very difficult to implement, and actually we did not find anything that perfectly fits our needs. It is already difficult to extract topics from a phrase and have a good polarity estimation for a full phrase. We would need polarity estimation for a certain topic inside a phrase, and this could seem unfeasible (and actually it is, right now), but we wanted anyway develop something in this sense.
+Maybe in the future when this kind of tools will exist, our approach can be used to effectively compute similarity scores among users.
+
 \subsection{Tweet filtering}
-Here we needed to distinguish tweets speaking about politics from the other ones. In fact we are interested in comparing users on their political opinions, not on every possible other topic. This have some advantages:
+The first thing we wanted to do in this part is to distinguish tweets speaking about politics from the other ones. In fact we are interested in comparing users on their political opinions, not on every possible other topic. This have some advantages:
 \begin{enumerate}
-\item Greatly reduces the input data size. Of course not every tweet speaks of politics.
-\item Gives a better approximation of the political point of view of a user. In fact a two users can be very close politically but very far in other contexts (cinema likes/dislikes for example).
+\item Greatly reduces the input data size. Of course not every tweet speaks about politics.
+\item If the similarity score is a single value, this gives a better approximation of the political point of view of a user. In fact users with a low similarity score could be very close politically because they are very far in other contexts (cinema likes/dislikes for example).
 \end{enumerate}
 
 This filtering can be done in two ways:
@@ -111,7 +171,7 @@ This filtering can be done in two ways:
 \item Using some semantic annotator, like TAGME, keeping phrases that have some annotation about politics. Actually also this approach needs the definition of a dictionary (of annotation this time), but the dictionary terms are potentially a lot less. TAGME has the possibility to compute a similarity score between topics (class \texttt{RelatednessCache}), so we need only to define some central topic for our analysis (like the names of the politicians, and the topic ``Politics'') and then compute scores against the topics found in a tweet. If the total score is over a certain threshold the tweet is kept, otherwise is discarded.
 \end{enumerate}
 
-Of course the second approach is heavily influenced on how much precise is the annotator.
+Of course the second approach is heavily influenced on how much precise is the annotator. In fact it's easy that many tweets speaking about politics are lost in this procedure. On the other hand (and this is the important fact) the vast majority of the selected tweets actually speak about politics (TODO: mettere qualche statistica?), so we can continue our analysis since we have at our disposal a huge set of tweets to evaluate.
 
 \subsection{Similarity among users}
 E qui si che e' un bordello...

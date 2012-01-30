@@ -47,19 +47,18 @@ class tagMerge(object):
 						#il secondo elemento invece e' il numero di tweet in cui compare
 						#"hashtag" con il significato "an"
 						self.hashtags[hashtag] = dict()
-						self.hashtags[hashtag][an] = [1,freq]
+						self.hashtags[hashtag][an] = math.log(freq)
 					else:
 						if an in self.hashtags[hashtag]:
-							self.hashtags[hashtag][an][0] += 1
-							self.hashtags[hashtag][an][1] += freq
-						else:	self.hashtags[hashtag][an] = [1,freq]	#non esiste an per l'hashtag "hashtag"
+							self.hashtags[hashtag][an] += math.log(freq)
+						else:	self.hashtags[hashtag][an] = math.log(freq)	#non esiste an per l'hashtag "hashtag"
 	
 		print( "Done [total users: {0}, total tweets: {1}].\nNow inverting...".format( self.totalUsers, self.totalTweets ) )
 		self.invert()
 		print( "Inverted [total topics: {0}].\nNow saving...".format( len( self.topics ) ) )
 		self.print_data( self.hashtags, ".hashtags", '#', '' )
 		self.print_data( self.topics, ".topics", '', '#' )
-		
+	
 	def invert( self ):
 		for h in self.hashtags:				# scorro gli hashtags
 			for t in self.hashtags[h]:		# scorro i topic e gli aggiungo al dizionario
@@ -70,12 +69,11 @@ class tagMerge(object):
 					self.topics[t][h] = self.hashtags[h][t]
 				else:
 					if h in self.topics[t]:
-						self.topics[t][h][0] += self.hashtags[h][t][0]
-						self.topics[t][h][1] += self.hashtags[h][t][1]
+						self.topics[t][h] += self.hashtags[h][t]
 					else:
 						self.topics[t][h] = self.hashtags[h][t]
-		
-		
+	
+	
 	
 	def print_data( self, dictionary, fileSuffix, keyPrefix, valuePrefix ):
 		name, ext = os.path.splitext(self.filename)
@@ -83,29 +81,18 @@ class tagMerge(object):
 		
 		sortedHashtags = sorted( dictionary )
 		for h in sortedHashtags:
-			totalTweets = 0
-			totalUsers = 0
-			if self.important:
-				for a in dictionary[h]:	# quante volte e' stato usato questo hashtag?
-					totalTweets += dictionary[h][a][1]
-					totalUsers += dictionary[h][a][0]
-			
-			#if self.important and totalTweets < 5000:	#continuo solo se e' stato usato almeno 10000 volte
-			#	continue
-			if self.important and totalUsers < 0.05 * self.totalUsers and totalTweets < 0.05 * self.totalTweets:
-				continue
 			
 			out.write( keyPrefix + h )
 			# ordina le annotazioni in base al numero di utenti
-			sortedAnnotations = sorted( dictionary[h].keys(), key=lambda x: -dictionary[h][x][0] )
+			sortedAnnotations = sorted( dictionary[h].keys(), key=lambda x: -dictionary[h][x] )
 			
 			printed = 0
 			# stampo le annotazioni fino a quando non ho considerato il 60% dei tweets
 			for a in sortedAnnotations:
-				out.write( ' ' + valuePrefix + a + ' f=' + str( dictionary[h][a][1] ) + ' u=' + str( dictionary[h][a][0] ) )
+				out.write( ' ' + valuePrefix + a + ' s=' + str( dictionary[h][a] ) )
 				if self.important:
-					printed += dictionary[h][a][1]
-					if printed >= 0.2 * totalTweets:
+					printed += 1
+					if printed >= 20
 						break
 
 			out.write( '\n' )
