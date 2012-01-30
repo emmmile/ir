@@ -12,9 +12,9 @@ from subprocess import call
 
 tmp = ".tmp"
 text = sys.argv[1]
-frequencyPrefix = "f="
-usersPrefix = "u="
-
+#frequencyPrefix = "f="
+#usersPrefix = "u="
+scorePrefix = "s="
 
 
 
@@ -36,20 +36,22 @@ for t in open( tmp ):
 		tags = line.rstrip().split( ' #' )
 		for t in tags[1:]:
 			#print( t )
-			h,f,u = t.split()
-			freq = int(f.replace(frequencyPrefix, ""))
-			users = int(u.replace(usersPrefix, ""))
+			h,s = t.split()
+			score = float(s.replace(scorePrefix, ""))
+			#h,s,u = t.split()
+			#freq = int(f.replace(frequencyPrefix, ""))
+			#users = int(u.replace(usersPrefix, ""))
 			if h not in results:
-				results[h] = [freq, users]
+				results[h] = score#[freq, users]
 			else:
-				results[h][0] += freq
-				results[h][1] += users
+				results[h] += score#freq
+				#results[h][1] += users
 
 print( "You may consider to tag '" + text + "' with these hashtags:\n" )
 
-sortedTags = sorted( results, key=lambda x: -results[x][1] )
+sortedTags = sorted( results, key=lambda x: -results[x] )
 for h in sortedTags[:10]:
-	print( "  #" + h + " " + frequencyPrefix + str( results[h][0] ) + " " + usersPrefix + str( results[h][1] ) )
+	print( "  #" + h + " " + scorePrefix + str( results[h] ) ) # + " " + usersPrefix + str( results[h][1] ) )
 	
 	
 call( ["rm", tmp ] )

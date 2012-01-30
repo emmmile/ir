@@ -6,15 +6,16 @@ import re
 import sys
 import codecs
 from optparse import OptionParser #deprecated in 2.7 or newer
-
+import math
 
 class tagMerge(object):
 
-	def __init__(self, filename, onlyImportant):
+	def __init__(self, filename, onlyImportant,threshold):
 		self.filename = filename
 		self.hashtags = dict()		# mapping hashtag -> topics
 		self.topics = dict()		# mapping topic -> hashtags
 		self.important = onlyImportant
+		self.threshold = threshold
 		self.totalUsers = 0
 		self.totalTweets = 0
 
@@ -47,11 +48,11 @@ class tagMerge(object):
 						#il secondo elemento invece e' il numero di tweet in cui compare
 						#"hashtag" con il significato "an"
 						self.hashtags[hashtag] = dict()
-						self.hashtags[hashtag][an] = math.log(freq)
+						self.hashtags[hashtag][an] = math.log(1 + freq,2)
 					else:
 						if an in self.hashtags[hashtag]:
-							self.hashtags[hashtag][an] += math.log(freq)
-						else:	self.hashtags[hashtag][an] = math.log(freq)	#non esiste an per l'hashtag "hashtag"
+							self.hashtags[hashtag][an] += math.log(1 + freq,2)
+						else:	self.hashtags[hashtag][an] = math.log(1 + freq,2)	#non esiste an per l'hashtag "hashtag"
 	
 		print( "Done [total users: {0}, total tweets: {1}].\nNow inverting...".format( self.totalUsers, self.totalTweets ) )
 		self.invert()
@@ -81,6 +82,15 @@ class tagMerge(object):
 		
 		sortedHashtags = sorted( dictionary )
 		for h in sortedHashtags:
+			totalScore = 0
+			
+			
+			if self.important:
+				for a in dictionary[h]:
+					totalScore += dictionary[h][a]
+			
+			if self.important and totalScore < self.threshold * 0.01 * self.totalUsers:
+				continue
 			
 			out.write( keyPrefix + h )
 			# ordina le annotazioni in base al numero di utenti
@@ -92,7 +102,7 @@ class tagMerge(object):
 				out.write( ' ' + valuePrefix + a + ' s=' + str( dictionary[h][a] ) )
 				if self.important:
 					printed += 1
-					if printed >= 20
+					if printed >= 20:
 						break
 
 			out.write( '\n' )
@@ -103,10 +113,11 @@ class tagMerge(object):
 if __name__ == '__main__':
 	parser = OptionParser("Usage: ./hashtagMerge.py [options] FILE")
 	parser.add_option('-o','--onlyimportant', action='store_true', default=False, help="flag used to print only most important topics (and tags).")
+	parser.add_option('-t','--threshold', action='store',type='float',dest='threshold',help="set the threshold value for printing (% of the total users). Use with -o.")
 	(options, args) = parser.parse_args( sys.argv )
 	if len( args ) != 2:
 		parser.error( "Incorrect number of arguments." )
 	
-	tagger = tagMerge( args[1], options.onlyimportant )
+	tagger = tagMerge( args[1], options.onlyimportant, options.threshold )
 	tagger.parse()
 
