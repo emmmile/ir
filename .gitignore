@@ -3,11 +3,11 @@ data/*
 *.class
 nohup.out
 
-twitter-sentiment-analysis/files
-report.aux
-report.log
-report.pdf
-report.out
+sentiment-analysis/files
+#report.aux
+#report.log
+#report.pdf
+#report.out
 
 
 
