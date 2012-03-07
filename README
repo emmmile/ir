@@ -1,96 +1,28 @@
+Overview
+========
 
-Files
-
-=========================================================================================================
-
-graph.py		Takes as input a graph file (see slides for the format) and returns a new graph 
-			file where each row has this format:
-			
-				userID	length	(politicianID)+
-				
-			Where length is the size of the politicians list.
-			It prints also some statistics on the distribution of users.
-
-=========================================================================================================
-
-parse.py		Takes as input a tweet file (see slides for the format) and returns a 3 files
-			which rows have the following format:
-				
-				file.text		tweetID  time  text
-				file.list		userID  (tweetID)+
-				file.hashtags		hashtag  (@userID (tweetID)+)+
-			
-			A part from the script is the same as parse_tweets.py by paurullan.
-			The most important difference is that here we consider only tweets that contains
-			hashtags.
-		
-=========================================================================================================
-
-hashtagAnnotation.py	Takes as input a tweet file (time userID textWithHashtag)
-			and a annotation file (time userID (#annotationID@freq)+)
-			and returns a file which rows have the format:
-
-				file.hashtagUser	userID (#hashtag (freq annotationID)+ )+
-
-=========================================================================================================
-
-tagMerge.py		Takes as input a hashtagUser file [produced by tagAnnotation.py] and returns a
-			file which rows have the format:
-
-				file.hashtag		hashtag annotationID 
-
-=========================================================================================================
-
-GetTagdef.py		Takes as input a file in format (hashtag qualsiasicosa), creates a list of tags,
-			requests definitions of tags to remote server and writes a file, in format:
-
-				file.tagdef		hashtag ( i} hashtagdef )+ 
-
-=========================================================================================================
-
-./old/hashtagUser.py		Same input of parse.py, but returns only the file with the hashtags.
-
-=========================================================================================================
-
-TweetFilter.java	Should take as input the annotated tweet file and filter it leaving only the
-			rows (tweets) that talks about politics.
-			TODO: now this takes as input the file.text and reannotates it!!!
-
-=========================================================================================================
-
-TweetAnnotation.java	TweetAnnotation.java of paurullan, modified for considered only significant annotation
-
-=========================================================================================================
-
-TagDefAnnotation.java	Annotation of TwitterUser's definition on "http://tagdef.com/"
-
-=========================================================================================================
-
-AnchorSearcher.java	?????
-
-=========================================================================================================
-
-./old/HashtagAnnotation.java	create a file ".annotationHash"
-				with format (HashTag (#Annotazioni numUserIDs (UserID)+)+ \n)+
-				from a file with format (hashtags (@user1 (idtweets)+)+)
-				and a file with format (idtweets( # annotationName))
-
-=========================================================================================================
-
-HashLineFilter.sh	Create two files, the first with text of tweets the second with the corrisponding annotation, 
-			elaborating two files (first with text of tweets) leaving only tweets conteined "#"
-
-=========================================================================================================
-
-clean.sh		script bash for cleaning tweets, delating url and simbol as "#" in hashtag
-
-=========================================================================================================
-
-commands		appends a chain of file, sorts "in modo STABILE" considering the second fild,
-			compresses data
-
-=========================================================================================================
-
-DUBBI		Questions to share
-
+This folder is composed by the following folders:
+|----- data:
+|      It contains two dataset of filtered tweets:
+|      data/initial-dataset/ is a filter of ir2011/data/tweets, while instead
+|      data/i3terroni-dataset/ is a filter of ir2011/i3terroni/users_timelines 
+|      
+|----- graph-invert:
+|      It contains the script necessary to invert the graph file given in
+|      ir2011/data.
+|
+|----- hashtags:
+|      Contains the work done on the hashtags including:
+|       - scripts for filtering the data files from unnecessary tweets 
+|         (files in json or not) 
+|       - scripts for download the tag definitions from tagdef.com
+|       - scripts for autotag a given tweet using the informations found
+|         in the dataset
+|
+|----- old:
+|      Not important, contains old files and tests.
+|
+|----- sentiment-analysis:
+|      Contains mainly a tool for this kind of analysis originally found in:
+|      http://twitter-sentiment-analysis.googlecode.com/svn
 

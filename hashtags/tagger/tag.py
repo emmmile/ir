@@ -11,7 +11,8 @@ import os
 from subprocess import call
 
 tmp = ".tmp"
-text = sys.argv[1]
+text = sys.argv[2]
+topicsfile = sys.argv[1]
 #frequencyPrefix = "f="
 #usersPrefix = "u="
 scorePrefix = "s="
@@ -21,7 +22,8 @@ scorePrefix = "s="
 call( ["java", "-Xmx2G", "AnnotateText", tmp, "\"" + text + "\""], stdout = open(os.devnull, 'wb') )
 
 lines = []
-for line in open( "data/allusers/allusers.topics" ):
+for line in open( topicsfile ):
+#for line in open( "../../data/i3terroni-dataset/hashtags-filtered/with-hashtags.cleaned.annotation" ):
 	lines.append( line )
 
 results = dict()

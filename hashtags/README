@@ -1,0 +1,77 @@
+parse.py		Takes as input a tweet file (see slides for the format) and returns a 3 files
+			which rows have the following format:
+				
+				file.text		tweetID  time  text
+				file.list		userID  (tweetID)+
+				file.hashtags		hashtag  (@userID (tweetID)+)+
+			
+			A part from the script is the same as parse_tweets.py by paurullan.
+			The most important difference is that here we consider only tweets that contains
+			hashtags.
+			
+			Usage:
+			
+			./parse.py /path/file.json
+			
+			Output:
+			
+			/path/file.json.text
+			/path/file.json.list
+			/path/file.json.hashtags
+			
+			as specified above.
+			
+=========================================================================================================
+
+hashtagAnnotation.py	Takes as input a tweet file (time userID textWithHashtag)
+			and a annotation file (time userID (#annotationID@freq)+)
+			and returns a file which rows have the format:
+
+				file.hashtagUser	userID (#hashtag (freq annotationID)+ )+
+				
+			Usage:
+			
+			./hashtagAnnotation /path/file.tweet /path/file.annotation
+			
+			Of course both files should have the same number of rows and each row corresponds
+			to the same tweet in both files.
+			
+			Output:
+			
+			/path/file.hashtagsUser
+			
+			with the format specified above.
+
+=========================================================================================================
+
+hashtagMerge.py		Takes as input a hashtagUser file [produced by tagAnnotation.py] and returns two
+			files which rows have the format:
+
+				file.hashtags		hashtag annotationID
+				file.topics		
+				
+				
+			Usage:
+			
+			./hashtagMerge.py /path/file.hashtagsUser
+			
+			Output:
+			
+			/path/file.hashtags
+			/path/file.topics
+			
+			with the format specified above.
+			
+
+=========================================================================================================
+
+toUnicode.py		Only replace &#... html codes to unicode.
+
+			Usage:
+			
+			./toUnicode.py /path/file
+			
+			Output:
+			
+			/path/file.unicode
+				

@@ -42,12 +42,11 @@ class tagAnnotation(object):
 				result = dict()			# creo un dizionario che ha annotazioni come chiavi
 								# e numero di tweet come valori
 				for a in hashtagAnn[t]:
-					#key, rho = a.split('@')
-					#result[key] = result.setdefault( key, 0.0 ) + float(rho)
-					result[a] = result.setdefault( a, 0 ) + 1
-					#if a == "Quore":
-					#	print( result[a] )
-								# sommo 1 se trovo l'annotazione a
+					#XXX questo e' da usare nel caso il file annotato contenga anche il rho
+					key, rho = a.split('@')
+					result[key] = result.setdefault( key, 0.0 ) + float(rho)
+					#XXX altrimenti basta questa riga
+					#result[a] = result.setdefault( a, 0 ) + 1
 				
 				resultList = []
 				for el in result:		# scorro il dizionario e creo una lista
@@ -78,7 +77,7 @@ class tagAnnotation(object):
 			time, userID, text = text_tweet.split(None, 2) 		#None spezza sui caratteri bianchi
 			tags = re.findall('#\w+', text.lower() )		#prendo gli hashtags
 			
-			if len(tags) == 0 :
+			if len(tags) == 0:
 				continue
 				
 			#annotations = re.findall('#[@\w\.]+', annotation_tweet)	#prende le annotazioni

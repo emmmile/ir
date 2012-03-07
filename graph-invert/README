@@ -1,0 +1,28 @@
+
+graph.py	Takes as input a graph file (see slides for the format) and returns a new graph 
+		file where each row has this format:
+			
+			userID	length	(politicianID)+
+				
+		Where length is the size of the politicians list.
+		It prints also some statistics on the distribution of users.
+		
+		Usage:
+		
+		./graph.py /path/file.graph
+		
+		Output:
+		
+		/path/file.graph.sorted
+
+=========================================================================================================
+
+randomgraph.py	Creates a random graph file, compatible with graph.py input. This is only for testing.
+
+		Usage:
+		
+		./graph.py /path/file.graph
+		
+		Output:
+		
+		The specified file contains the output.

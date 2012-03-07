@@ -38,8 +38,8 @@ class tagMerge(object):
 				for pair in tmp[1].split('|'):
 					couple = pair.split( None, 1 )
 					an = couple[1].rstrip()		#prende l'annotazione
-					freq = int( couple[0] )		#prende la frequenza
-					#freq = float( couple[0] )
+					#freq = int( couple[0] )	#XXX prende la frequenza nel caso sia un int
+					freq = float( couple[0] )	#XXX nel caso sia un float (somma dei rho)
 					self.totalTweets += freq
 					
 					if hashtag not in self.hashtags:	#non esiste hashtag nel dizionario

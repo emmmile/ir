@@ -1,6 +1,9 @@
 #!/usr/bin/env python2.6
 # -*- coding: utf-8 -*-
 
+# Prende in input un file che contiene tutti gli hashtags uno per line con davanti il "#"
+# e scrive un file che contine un hashtags con le sue definizioni uno per riga
+
 import urllib2
 import json
 import codecs
@@ -18,6 +21,7 @@ class GetTagdef(object):
 	def tagRequest(self, tag):		#recupera le definizioni di un dato hashtag "tag"
 		tagDef = []
 		host = "http://api.tagdef.com/"+tag+".json"
+#		print( "Tag '" + tag +"\n")
 		try:
 			response_stream = urllib2.urlopen(host)
 		except urllib2.HTTPError, e:
@@ -42,7 +46,7 @@ class GetTagdef(object):
 	def searchDef(self):
 		filename = open(self.filename)
 		def_filename = codecs.open(self.def_filename, 'w', 'utf-8')
-		tags = self.getTags(filename) #lista dei tags letta da file
+		tags = self.getTags(filename) #lista degli hashtags letta da file
 		for t in tags:
 			if self.tagRequest(t):
 				definitions = list(enumerate(self.tagRequest(t))) #lista di tuple (count "i" , value in pos "i")
