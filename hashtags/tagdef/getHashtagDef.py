@@ -5,6 +5,7 @@
 # e scrive un file che contine un hashtags con le sue definizioni uno per riga
 
 import urllib2
+import httplib
 import json
 import codecs
 import sys
@@ -24,9 +25,14 @@ class GetTagdef(object):
 #		print( "Tag '" + tag +"\n")
 		try:
 			response_stream = urllib2.urlopen(host)
+		except httplib.BadStatusLine, e:
+			self.err.write(host)
+			self.err.write("HTTP Error "+str(e.code))			
 		except urllib2.HTTPError, e:
+			self.err.write(host)
 			self.err.write("HTTP Error "+str(e.code))
 		except urllib2.URLError, e:
+			self.err.write(host)
 			self.err.write("URLError "+str(e.code))
 		else:
 			jsonTag = json.loads(response_stream.read())	#legge le def sottoforma di JSON dal server api.tagdef
@@ -47,7 +53,11 @@ class GetTagdef(object):
 		filename = open(self.filename)
 		def_filename = codecs.open(self.def_filename, 'w', 'utf-8')
 		tags = self.getTags(filename) #lista degli hashtags letta da file
+		counter = 0
 		for t in tags:
+			counter += 1
+			if counter % 10000 == 0:
+				print( "Read {0} lines (current hashtag: {1}).".format( counter, t))
 			if self.tagRequest(t):
 				definitions = list(enumerate(self.tagRequest(t))) #lista di tuple (count "i" , value in pos "i")
 				def_filename.write(u" {0} {1}\n".format(t, ' '.join( map(lambda x: str(x[0]) + "}"+ x[1], definitions) )))
