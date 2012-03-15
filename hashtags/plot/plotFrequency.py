@@ -26,9 +26,9 @@ class tagAnnotation(object):
 		#indice[TAB]score[\n]
 		
 		#out.write( "hashtag\tscore\n" )
-		sortedHashtags = sorted( dictionary, key=lambda x: -dictionary[x] )
+		sortedHashtags = sorted( dictionary, key=lambda x: -dictionary[x][0] )
 		for h in sortedHashtags:
-			out.write( "{0}\t{1}\n".format( h, dictionary[h] ) )
+			out.write( "{0}\t{1}\n".format( h, dictionary[h], len(dictionary[h][1]) ) )
 		
 		out.close()
 
@@ -55,8 +55,12 @@ class tagAnnotation(object):
 			
 			for t in tags :						#aggiungo le annotazioni nel dizionario
 				if t in self.hashtags:
-					self.hashtags[t] = self.hashtags[t] + 1
-				else: 	self.hashtags[t] = 1
+					self.hashtags[t] = [self.hashtags[t] + 1,self.hashtags[t][1]]
+					self.hashtags[t][1].add(userID)
+				else: 
+					self.hashtags[t] = [1,set()]
+					self.hashtags[t][1].add(userID)
+			
 		
 		self.print_data( self.hashtags, ".plot", '', '' )	
 		print( "Done." )	
