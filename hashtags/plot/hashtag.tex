@@ -18,16 +18,18 @@
 \begin{document}
 
 \begin{tikzpicture}
-    \begin{axis}[
+    \begin{semilogyaxis}[
         %xlabel=Hashtag score,
-        ylabel=hashtag frequency,
+        %ylabel=hashtag frequency,
         patch type=quadratic spline,
         height=0.95\textheight,
 		width=\textwidth]
 		
-		\addplot[color=red]   table[x expr=\lineno,y index=1] {frequency1000.plot};
-		%\addlegendentry{map, radius 32}
-    \end{axis}
+		\addplot[color=red]   table[x expr=\lineno,y index=1] {frequency-users200.plot};
+		\addlegendentry{hashtag frequency}
+		\addplot[color=green]   table[x expr=\lineno,y index=2] {frequency-users200.plot};
+		\addlegendentry{hashtag users}
+    \end{semilogyaxis}
 \end{tikzpicture}
 
 \end{document}
