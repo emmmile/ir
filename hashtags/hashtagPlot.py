@@ -60,10 +60,11 @@ class tagPrint(object):
 		out = open( name + fileSuffix, 'w')
 		
 		out.write( "hashtag\tscore\n" )
-		
+		index = 0
 		sortedHashtags = sorted( dictionary, key=lambda x: -dictionary[x] )
 		for h in sortedHashtags:
-			out.write( "{0}\t{1}\n".format( keyPrefix + h, dictionary[h] ) )
+			out.write( "{0}\t{1}\n".format( index, dictionary[h] ) )
+			index++
 		
 		out.close()
 
