@@ -11,21 +11,21 @@
 	label style={font=\small}
 }
 
-%\usepgfplotslibrary{external}
-%\tikzexternalize
-%\tikzset{external/force remake=true} 
+\usepgfplotslibrary{external}
+\tikzexternalize
+\tikzset{external/force remake=true} 
 
 \begin{document}
 
 \begin{tikzpicture}
     \begin{loglogaxis}[
         %xlabel=Hashtag score,
-        ylabel=hashtag score,
+        ylabel=hashtag frequency,
         patch type=quadratic spline,
         height=0.95\textheight,
 		width=\textwidth]
 		
-		\addplot[color=red]   table[x expr=\thisrowno{0},y index=1] {frequency2000.plot};
+		\addplot[color=red]   table[x expr=\lineno,y index=1] {frequency2000.plot};
 		%\addlegendentry{map, radius 32}
     \end{loglogaxis}
 \end{tikzpicture}
