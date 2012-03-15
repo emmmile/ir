@@ -52,12 +52,14 @@ class tagPrint(object):
 						self.hashtags[hashtag] += freq
 	
 		print( "Done [total users: {0}, total tweets (or score): {1}].\n".format( self.totalUsers, self.totalTweets ) )
-		self.print_data( self.hashtags, ".plot", '#', '' )
+		self.print_data( self.hashtags, ".plot", '', '' )
 	
 	
 	def print_data( self, dictionary, fileSuffix, keyPrefix, valuePrefix ):
 		name, ext = os.path.splitext(self.filename)
 		out = open( name + fileSuffix, 'w')
+		
+		out.write( "hashtag\tscore\n" )
 		
 		sortedHashtags = sorted( dictionary, key=lambda x: -dictionary[x] )
 		for h in sortedHashtags:
