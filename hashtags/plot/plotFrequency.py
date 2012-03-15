@@ -48,6 +48,7 @@ class tagAnnotation(object):
 			#text_tweet = toUnicode.toUnicode(text_tweet) 		#chiamo la funzione per convertire
 			time, userID, text = text_tweet.split(None, 2) 		#None spezza sui caratteri bianchi
 			tags = re.findall('#\w+', text.lower() )		#prendo gli hashtags
+			tags = map( lambda y : y[1:], x )			#toglie i cancelletti
 			
 			if len(tags) == 0:
 				continue

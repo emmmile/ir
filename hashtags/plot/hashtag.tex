@@ -11,9 +11,9 @@
 	label style={font=\small}
 }
 
-\usepgfplotslibrary{external}
-\tikzexternalize
-\tikzset{external/force remake=true} 
+%\usepgfplotslibrary{external}
+%\tikzexternalize
+%\tikzset{external/force remake=true} 
 
 \begin{document}
 
@@ -25,7 +25,7 @@
         height=0.95\textheight,
 		width=\textwidth]
 		
-		\addplot[color=red]   table[x expr=\coordindex,y index=1] {rhos1000.plot};
+		\addplot[color=red]   table[x expr=\thisrowno{0},y index=1] {frequency2000.plot};
 		%\addlegendentry{map, radius 32}
     \end{loglogaxis}
 \end{tikzpicture}
