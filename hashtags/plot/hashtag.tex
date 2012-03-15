@@ -18,16 +18,16 @@
 \begin{document}
 
 \begin{tikzpicture}
-    \begin{loglogaxis}[
+    \begin{axis}[
         %xlabel=Hashtag score,
-        ylabel=hashtag score,
+        ylabel=hashtag frequency,
         patch type=quadratic spline,
         height=0.95\textheight,
 		width=\textwidth]
 		
-		\addplot[color=red]   table[x expr=\lineno,y index=1] {rhos2000.plot};
+		\addplot[color=red]   table[x expr=\lineno,y index=1] {frequency1000.plot};
 		%\addlegendentry{map, radius 32}
-    \end{loglogaxis}
+    \end{axis}
 \end{tikzpicture}
 
 \end{document}
