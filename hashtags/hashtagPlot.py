@@ -64,7 +64,7 @@ class tagPrint(object):
 		sortedHashtags = sorted( dictionary, key=lambda x: -dictionary[x] )
 		for h in sortedHashtags:
 			out.write( "{0}\t{1}\n".format( index, dictionary[h] ) )
-			index++
+			index += 1
 		
 		out.close()
 
