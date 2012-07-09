@@ -206,11 +206,11 @@ The other two steps instead require to build some kind of dictionary containing 
 
 \subsection{How the merge works}
 \label{sec:merge}
-One fundamental step in the previous procedure is how to merge together informations coming from different users into a single score. We assumed three possible score measures that are very simple to calculate and give a base for furter reasoning. They are, for a fixed pair $<h, a>$ (hashtag, annotation):
+One fundamental step in the previous procedure is how to merge together informations coming from different users into a single score. We assumed three possible score measures that are very simple to calculate and give a base for furter reasoning. They are, for a fixed pair $\langle h,a \rangle$, (hashtag, annotation):
 \begin{enumerate}
-\item the user count $u(h,a)$, that is simply the number of users that used the pair $<h,a>$ in at least one tweet, indifferently from the number of these tweets. Having a high $u(h,a)$ is an indication of the popularity of the pair $<h,a>$: the hashtag $h$ is used by many users with meaning $a$.
+\item the user count $u(h,a)$, that is simply the number of users that used the pair $<h,a>$ in at least one tweet, indifferently from the number of these tweets. Having a high $u(h,a)$ is an indication of the popularity of the pair $\langle h,a \rangle$: the hashtag $h$ is used by many users with meaning $a$.
 
-\item the total number of tweets where the $<h,a>$ pair is used, disregaring any information about the users (i.e. the previous indicator). We will indicate this number with $\mathcal{F}(h,a)$. This can be easily calculated if $w(u,h,a)$ simply represent the number of tweets written by $u$, where the pair $<h,a>$ is used. In formulas:
+\item the total number of tweets where the $\langle h,a \rangle$ pair is used, disregaring any information about the users (i.e. the previous indicator). We will indicate this number with $\mathcal{F}(h,a)$. This can be easily calculated if $w(u,h,a)$ simply represent the number of tweets written by $u$, where the pair $\langle h,a \rangle$ is used. In formulas:
 \begin{equation}
 \label{eqn:frequency}
 \mathcal{F}(h,a) = \sum_{u} f(u,h,a)
@@ -358,9 +358,32 @@ In fact if the hashtag is annotated with TAGME many times, in different tweets, 
 
 \subsection{Other meanings}
 We downloaded some hashtag definitions from \href{http://tagdef.com/}{tagdef.com}. Tagdef.com is a web server, that can be used for looking up an hashtag definition, and voting it.
-If the definition doesn't exist or isn't good, the server allows you to create your own definition in few seconds. So it's possible to obtain up to three definitions for an hashtag, sorted by the votes of users. All twitter-users can contribute to grow the database of definitions (as in Wikipedia).
+If the definition doesn't exist or isn't good, the server allows you to create your own definition in few seconds. So it's possible to obtain up to five definitions for an hashtag, sorted by the votes of users \ref{tab:hashDef}. All twitter-users can contribute to grow the database of definitions (as in Wikipedia).
 We observe that the hashtags with definition are approximately a half of the total, so this can be considered a good instrument to compare the meanings (annotations) obtained by tweets with those extracted by the users definitions.
 This match is a possible test of reliability of the application of TAGME on the tweets. %ranking the annotations of user's definitions as the real semantic of hashtag.
+
+\begin{table}[h]
+\label{tab:hashDef}
+\centering
+    \begin{tabular}{ | l | p{4cm} | p{4cm} | p{4cm} |}
+    \hline
+Hashtag & First def & Second def & Third def \\ \hline
+\raisebox{-1mm}{10dec} & \small{Protests in Russia against unfair elections} & \small{Something to do with Russian anti-putin demonstrations?} & \small{A tweet showing that it's the 10th of December}\\
+\raisebox{-1mm}{22agustos} & \small{The date in which internet will supposedly die in Turkey, by implementation of a new state filter} & \small{And bring us in line with china, north korea, iran, saudi arabia, cuba, and such...} & \small{It is august 22nd in turkish. a new law will be applied from then on, increasing internet filtering...}\\
+\raisebox{-1mm}{26s} & \small{Elecciones parlamentarias en VENEZUELA 2010, mikemike2020} & \small{Elecciones parlamentarias en VENEZUELA 2010, news \& comments by mikemike2020} & \small{Importantisimas elecciones para el futuro de VENEZUELA no dejes que los demás decidan por ti, VOTA}\\
+\raisebox{-1mm}{aa} & \small{Alcoholics Anonymous} & \small{African american } & \small{All Americans}\\
+\raisebox{-1mm}{ac} & \small{Atlantic City} & \small{AC Green(40 year old virgin)} &  \small{Air conditioner}\\
+\raisebox{-1mm}{agt} & \small{America's Got Talent = a favorite new show on \#NBC television network that is teamed up in 2010 with YouTube allowing viewers to VOTE online for their favorite NEW TALENT} & \small{Created by @gobig3 to explain "Aint got time"   www.gobig3.bigcartel.com} & \small{Arabs Got Talent}\\
+\raisebox{-1mm}{amore} & \small{L'Amore non esiste, è un'invenzione dell'uomo a fini positivi, cioè per creare unione, famiglia, ecc. } & \small{Love each other as you'd like to be loved in return. This hashtag originated from Alex Reid's adoration of the 1953 version of Thats Amore by Dean Martin} & \small{Love for Alex Reid}\\
+\raisebox{-1mm}{aps} & \small{Atención Primaria en Salud} & \small{Atlanta Public Schools in Atlanta, Georgia} & \small{Amigos por siempre}\\
+\raisebox{-1mm}{berlusconi} & \small{Italian long-time entrepreneur, politician and now Prime Minister. Owns/controls vast majority of italian TVs and magazines, enterprises etc. Blindingly rich. His best is probably having said, about Obama, that he is "Cool, Young and even Tanned"} & \small{The Amazing Berlusconi} & \small{}\\
+\raisebox{-1mm}{raiperunanotte} & \small{Italian long-time entrepreneur, politician and now Prime Minister. Owns controls vast majority of italian TVs and and magazines, enterprises etc. Blindingly rich. His best is probably having said, about Obama, that he is "Cool, Young and even Tanned"} & \small{Italian streamed and free version of a TV talk show called \#annozero, which was instead censored by \#berlusconi. On march 26, 2010, a peak of 200K streamed connections was reached. The Net is the way to go for a real democracy, it seems} & \small{\# let it not be for one night only  \# let it be freedom for all and forever}\small{Raiperunanotte is the first step to restore democracy, freedom and justice in Italy. Thanks to the web Berlusconi has lost his power to censor free voices on RAI, the Italian public TV which he keeps under control}\\
+ \hline
+    \end{tabular}
+    \caption{Table of the first three definitions of some hashtags.}
+    \label{tab:pertinence}
+\end{table}
+
 
 \subsection{Tagger}
 \label{sec:tagger}
