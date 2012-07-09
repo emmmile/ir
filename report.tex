@@ -381,7 +381,6 @@ Hashtag & First def & Second def & Third def \\ \hline
  \hline
     \end{tabular}
     \caption{Table of the first three definitions of some hashtags.}
-    \label{tab:pertinence}
 \end{table}
 
 
@@ -397,6 +396,26 @@ The program works as follow:
 
 This program in practice propose the ``best'' hashtags for a given text, based on statistical informations derived from the whole set of tweets. This is a functionality that could be implemented in Twitter when a user write a sentence; the domain where the informations are obtained can of course be restricted to a subset of all the tweets of Twitter. For example  can be just the tweets of the user writing the sentence, or just the tweets in a certain window of time.  
 
+\begin{table}[h]
+\centering
+    \begin{tabular}{ | l | l | l | p{8cm} |}
+    \hline
+Tweet &  & UserID & Tweet \\ \hline
+\raisebox{-1mm}{482.3} & \raisebox{-1mm}{1321127597} & \raisebox{-1mm}{14819549} & \small{RT  Silvio Berlusconi si è dimesso.}\\
+\raisebox{-1mm}{482.3} & \raisebox{-1mm}{1316267331} & \raisebox{-1mm}{14723349} & \small{regala una pompetta al signor berlusconi TA11}\\
+\raisebox{-2mm}{431.2} & \raisebox{-2mm}{1271074275} & \raisebox{-2mm}{29181795} & \small{Rifondazione comunista: Il CPN del 10-11 aprile}\\
+\raisebox{-2mm}{385.4} & \raisebox{-2mm}{1320877499} & \raisebox{-2mm}{5913352} & \small{Tremanti tra Monti e Tremonti}\\
+\raisebox{-2mm}{382.0} & \raisebox{-2mm}{1259704223} & \raisebox{-2mm}{147139427} & \small{Scalfaro in formissima!}\\
+\raisebox{-1mm}{357.1} & \raisebox{-1mm}{1321105955} & \raisebox{-1mm}{248610716} &  \small{RT  La rete si prepara a salutare Berlusconi}\\
+\raisebox{-1mm}{351.0} & \raisebox{-1mm}{1320358483} & \raisebox{-1mm}{189573329} & \small{Questa e' la sinistra italiana...}\\
+\raisebox{-1mm}{340.2} & \raisebox{-1mm}{1300995181} & \raisebox{-1mm}{10553182} & \small{e veltroni si incartò annozero}\\
+\raisebox{-1mm}{338.3} & \raisebox{-1mm}{1307969128} & \raisebox{-1mm}{260309439} & \small{RT È stato un referendum sul berlusconismo, dall'esito inequivocabile.}\\
+\raisebox{-1mm}{322.1} & \raisebox{-1mm}{1306755453} & \raisebox{-1mm}{250399937} & \small{Cosenza sì, centroSinistra ma vincerà il pdl purtroppo}\\
+ \hline
+    \end{tabular}
+    \caption{Table of the most pertinent political tweets.}
+    \label{tab:pertinence}
+\end{table}
 
 
 \section{Sentiment Analysis}
