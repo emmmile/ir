@@ -1,7 +1,7 @@
 \documentclass[a4paper,11pt,oneside]{article}
 
 \usepackage[latin1,utf8]{inputenc}
-\usepackage[english, english]{babel}
+\usepackage[english, italian]{babel}
 \usepackage{amsmath, amsfonts, amssymb, amsthm}
 \usepackage{graphicx}
 \usepackage[hmargin=25mm,vmargin=25mm]{geometry}
@@ -184,25 +184,25 @@ We proceeded in the following steps:
 \item Select only tweets that contains at least an hashtag. This has been done with a simple bash command. The tweets those use at least one hashtag are about 16\% of the total (about 3.4 millions over 21).
 \item Filter only tweets that has at least one annotation. This has been done with the script \texttt{tweetsFilter.py}, which opens both the tweet file and the annotated one, discarding tweets with no annotation in the second file.
 \item Collect for every user all the pairs \ha is an hashtag and $a$ an annotation. If for user $u$ exist such a pair, means that $u$ wrote some tweets where $h$ appear as hashtag, and these tweets are annotated with $a$. 
-%What relation there is between an hashtag and an annotation, $(h,a)$? Intuitively how much near is the meaning of hashtag $h$ and that of annotation $a$.
+%What relation there is between an hashtag and an annotation, \ha? Intuitively how much near is the meaning of hashtag $h$ and that of annotation $a$.
 We actually approximate the meaning of an hashtag with some kind of metrics based on the frequency of couple $\langle h,a \rangle$ in the tweets of the user $u$, on its reliability ($\rho$ of annotations) and the number of users that use the hashtag $h$ with meaning $a$. We indicate this metrics with a weight $w(u,h,a)$ that can be computed using the factors just introduced.
 
-A first approach can be to consider the number of times that the pair $(h,a)$ has been used by $u$. In this case:
+A first approach can be to consider the number of times that the pair \ha has been used by $u$. In this case:
 \begin{equation}
-w(u,h,a) = f(u,h,a) = \text{number of times user $u$ used association $(h,a)$}
+w(u,h,a) = f(u,h,a) = \text{number of times user $u$ used association \ha}
 \end{equation} 
 A second approach could be to use the sum of the \textit{rho}s of the annotations we are talking about (instead of the raw tweet count). In this case we have instead:
 \begin{equation}
-w(u,h,a) = P(u,h,a) = \text{sum of $\rho$'s of annotations where $u$ used the association $(h,a)$}
+w(u,h,a) = P(u,h,a) = \text{sum of $\rho$'s of annotations where $u$ used the association \ha}
 \end{equation} 
 For further details see the script \texttt{hashtagAnnotation.py}.
-\item Merge all the informations produced above creating a unique score for association $(h,a)$, summing up the contributions of the various users. This has been done with the script \texttt{hashtagMerge.py}. Here the annotations are sorted by their importance, as explained in section \ref{sec:merge}.
+\item Merge all the informations produced above creating a unique score for association \ha, summing up the contributions of the various users. This has been done with the script \texttt{hashtagMerge.py}. Here the annotations are sorted by their importance, as explained in section \ref{sec:merge}.
 \end{enumerate}
 
 The last two points could have been realized in one single step, but for simplicity and further extensions we preferred to keep the two parts separated. The time (and I/O) complexity of the first two steps is linear in the number of tweets: it is necessary to keep only one tweet at the time in the internal memory. 
-The other two steps instead require to build some kind of dictionary containing the associations between every user and its pairs $(h,a)$. This, with the datasets at our disposal, can be easily done in internal memory\footnote{We used the built-in python \texttt{dict}.} but, if the dataset is bigger we have to use I/O efficient data structures.
+The other two steps instead require to build some kind of dictionary containing the associations between every user and its pairs \ha. This, with the datasets at our disposal, can be easily done in internal memory\footnote{We used the built-in python \texttt{dict}.} but, if the dataset is bigger we have to use I/O efficient data structures.
 
-%Notice that as we built associations of the type $(h,a)$ (that is, for every  we can easily ``invert'' this if we want to manage $(a,h)$ pairs, as we done in section \ref{sec:tagger}.
+%Notice that as we built associations of the type \ha (that is, for every  we can easily ``invert'' this if we want to manage $(a,h)$ pairs, as we done in section \ref{sec:tagger}.
 
 \subsection{How the merge works}
 \label{sec:merge}
@@ -234,7 +234,7 @@ Having in mind this consideration one can also observe that: %So how to combine 
 
 \begin{itemize}
 \item $u(h,a)$ is important in the final score.
-\item $\mathcal{F}(h,a)$ (or $\mathcal{P}(h,a)$) shouldn't be negligible. In other words the number of users that used association $(h,a)$ is clearly important, but there should be also some dependance, in the score, on how many times (or how often) a certain user used that association.
+\item $\mathcal{F}(h,a)$ (or $\mathcal{P}(h,a)$) shouldn't be negligible. In other words the number of users that used association \ha is clearly important, but there should be also some dependance, in the score, on how many times (or how often) a certain user used that association.
 An high frequency of hashtag $h$ correspondes to a bigger importance of $h$ (with a given meaning $a$), it must appear in the score.
 \end{itemize}
 
@@ -353,24 +353,24 @@ We observe that the hashtags with definition are approximately a half of the tot
 This match is a possible test of reliability of the application of TAGME on the tweets. %ranking the annotations of user's definitions as the real semantic of hashtag.
 
 \begin{table}[h]
-\label{tab:hashDef}
 \centering
     \begin{tabular}{ | l | p{4cm} | p{4cm} | p{4cm} |}
     \hline
-Hashtag & First def & Second def & Third def \\ \hline
-\raisebox{-1mm}{10dec} & \small{Protests in Russia against unfair elections} & \small{Something to do with Russian anti-putin demonstrations?} & \small{A tweet showing that it's the 10th of December}\\
-\raisebox{-1mm}{22agustos} & \small{The date in which internet will supposedly die in Turkey, by implementation of a new state filter} & \small{And bring us in line with china, north korea, iran, saudi arabia, cuba, and such...} & \small{It is august 22nd in turkish. a new law will be applied from then on, increasing internet filtering...}\\
-\raisebox{-1mm}{26s} & \small{Elecciones parlamentarias en VENEZUELA 2010, mikemike2020} & \small{Elecciones parlamentarias en VENEZUELA 2010, news \& comments by mikemike2020} & \small{Importantisimas elecciones para el futuro de VENEZUELA no dejes que los demás decidan por ti, VOTA}\\
-\raisebox{-1mm}{aa} & \small{Alcoholics Anonymous} & \small{African american } & \small{All Americans}\\
-\raisebox{-1mm}{ac} & \small{Atlantic City} & \small{AC Green(40 year old virgin)} &  \small{Air conditioner}\\
-\raisebox{-1mm}{agt} & \small{America's Got Talent = a favorite new show on \#NBC television network that is teamed up in 2010 with YouTube allowing viewers to VOTE online for their favorite NEW TALENT} & \small{Created by @gobig3 to explain "Aint got time"   www.gobig3.bigcartel.com} & \small{Arabs Got Talent}\\
-\raisebox{-1mm}{amore} & \small{L'Amore non esiste, è un'invenzione dell'uomo a fini positivi, cioè per creare unione, famiglia, ecc. } & \small{Love each other as you'd like to be loved in return. This hashtag originated from Alex Reid's adoration of the 1953 version of Thats Amore by Dean Martin} & \small{Love for Alex Reid}\\
-\raisebox{-1mm}{aps} & \small{Atención Primaria en Salud} & \small{Atlanta Public Schools in Atlanta, Georgia} & \small{Amigos por siempre}\\
-\raisebox{-1mm}{berlusconi} & \small{Italian long-time entrepreneur, politician and now Prime Minister. Owns/controls vast majority of italian TVs and magazines, enterprises etc. Blindingly rich. His best is probably having said, about Obama, that he is "Cool, Young and even Tanned"} & \small{The Amazing Berlusconi} & \small{}\\
-\raisebox{-1mm}{raiperunanotte} & \small{Italian long-time entrepreneur, politician and now Prime Minister. Owns controls vast majority of italian TVs and and magazines, enterprises etc. Blindingly rich. His best is probably having said, about Obama, that he is "Cool, Young and even Tanned"} & \small{Italian streamed and free version of a TV talk show called \#annozero, which was instead censored by \#berlusconi. On march 26, 2010, a peak of 200K streamed connections was reached. The Net is the way to go for a real democracy, it seems} & \small{\# let it not be for one night only  \# let it be freedom for all and forever}\small{Raiperunanotte is the first step to restore democracy, freedom and justice in Italy. Thanks to the web Berlusconi has lost his power to censor free voices on RAI, the Italian public TV which he keeps under control}\\
+Hashtag & First definition & Second definition & Third definition \\ \hline
+10dec & \footnotesize{Protests in Russia against unfair elections} & \footnotesize{Something to do with Russian anti-putin demonstrations?} & \footnotesize{A tweet showing that it's the 10th of December}\\
+22agustos & \footnotesize{The date in which internet will supposedly die in Turkey, by implementation of a new state filter} & \footnotesize{And bring us in line with china, north korea, iran, saudi arabia, cuba, and such} & \footnotesize{It is august 22nd in turkish. A new law will be applied from then on, increasing internet filtering}\\
+26s & \footnotesize{Elecciones parlamentarias en VENEZUELA 2010, mikemike2020} & \footnotesize{Elecciones parlamentarias en VENEZUELA 2010, news \& comments by mikemike2020} & \footnotesize{Importantisimas elecciones para el futuro de VENEZUELA no dejes que los demás decidan por ti, VOTA}\\
+aa & \footnotesize{Alcoholics Anonymous} & \footnotesize{African american } & \footnotesize{All Americans}\\
+ac & \footnotesize{Atlantic City} & \footnotesize{AC Green(40 year old virgin)} &  \footnotesize{Air conditioner}\\
+%agt & \footnotesize{America's Got Talent = a favorite new show on \#NBC television network that is teamed up in 2010 with YouTube allowing viewers to VOTE online for their favorite NEW TALENT} & \footnotesize{Created by @gobig3 to explain "Aint got time"   www.gobig3.bigcartel.com} & \footnotesize{Arabs Got Talent}\\
+amore & \footnotesize{L'Amore non esiste, è un'invenzione dell'uomo a fini positivi, cioè per creare unione, famiglia, ecc. } & \footnotesize{Love each other as you'd like to be loved in return. This hashtag originated from\dots} & \footnotesize{Love for Alex Reid}\\
+aps & \footnotesize{Atención Primaria en Salud} & \footnotesize{Atlanta Public Schools in Atlanta, Georgia} & \footnotesize{Amigos por siempre}\\
+berlusconi & \footnotesize{Italian long-time entrepreneur, politician and now Prime Minister. Owns/controls vast majority of italian TVs and magazines\dots} & \footnotesize{The Amazing Berlusconi} & \footnotesize{}\\
+raiperunanotte & \footnotesize{Italian streamed and free version of a TV talk show called \#annozero, which was instead censored by \#berlusconi. On march\dots} & \footnotesize{\# let it not be for one night only \# let it be freedom for all and forever} & \footnotesize{Raiperunanotte is the first step to restore democracy, freedom and justice in Italy. Thanks to the web\dots}\\
  \hline
     \end{tabular}
     \caption{Table of the first three definitions of some hashtags.}
+    \label{tab:hashDef}
 \end{table}
 
 
@@ -388,23 +388,16 @@ This program in practice propose the ``best'' hashtags for a given text, based o
 
 \begin{table}[h]
 \centering
-    \begin{tabular}{ | l | l | l | p{8cm} |}
+    \begin{tabular}{ | l | p{8cm} |}
     \hline
-Tweet &  & UserID & Tweet \\ \hline
-\raisebox{-1mm}{482.3} & \raisebox{-1mm}{1321127597} & \raisebox{-1mm}{14819549} & \small{RT  Silvio Berlusconi si è dimesso.}\\
-\raisebox{-1mm}{482.3} & \raisebox{-1mm}{1316267331} & \raisebox{-1mm}{14723349} & \small{regala una pompetta al signor berlusconi TA11}\\
-\raisebox{-2mm}{431.2} & \raisebox{-2mm}{1271074275} & \raisebox{-2mm}{29181795} & \small{Rifondazione comunista: Il CPN del 10-11 aprile}\\
-\raisebox{-2mm}{385.4} & \raisebox{-2mm}{1320877499} & \raisebox{-2mm}{5913352} & \small{Tremanti tra Monti e Tremonti}\\
-\raisebox{-2mm}{382.0} & \raisebox{-2mm}{1259704223} & \raisebox{-2mm}{147139427} & \small{Scalfaro in formissima!}\\
-\raisebox{-1mm}{357.1} & \raisebox{-1mm}{1321105955} & \raisebox{-1mm}{248610716} &  \small{RT  La rete si prepara a salutare Berlusconi}\\
-\raisebox{-1mm}{351.0} & \raisebox{-1mm}{1320358483} & \raisebox{-1mm}{189573329} & \small{Questa e' la sinistra italiana...}\\
-\raisebox{-1mm}{340.2} & \raisebox{-1mm}{1300995181} & \raisebox{-1mm}{10553182} & \small{e veltroni si incartò annozero}\\
-\raisebox{-1mm}{338.3} & \raisebox{-1mm}{1307969128} & \raisebox{-1mm}{260309439} & \small{RT È stato un referendum sul berlusconismo, dall'esito inequivocabile.}\\
-\raisebox{-1mm}{322.1} & \raisebox{-1mm}{1306755453} & \raisebox{-1mm}{250399937} & \small{Cosenza sì, centroSinistra ma vincerà il pdl purtroppo}\\
- \hline
+Tweet & Hashtags \\ \hline
+Berlusconi è l'ex-presidente del consiglio & \#berlusconi s=2935 \#annozero s=377 \#ballar \#pdl \#laresadeiconti \#italy \#politica \#finecorsa \#italia \#rubygate\\
+Monti giura e nomina il nuovo governo & \#governo s=345 \#berlusconi s=227 \#italia \#politica \#monti \#fiducia \#pdl \#opencamera \#referendum \#annozero\\
+Grillo stravince a Parma, antipolica prende campo & \#parma s=456 \#annozero s=150  \#grillo \#parmalat \#notav \#m5s  \#juventus \#beppegrillo \#beppe \#calcio\\
+\hline
     \end{tabular}
-    \caption{Table of the most pertinent political tweets.}
-    \label{tab:pertinence}
+    \caption{Examples of tagger use.}
+    \label{tab:tagger}
 \end{table}
 
 
@@ -512,7 +505,7 @@ Of course the second approach is heavily influenced on how much precise is the a
 We had worked with the second approach defining by hand a set of interesting political topics (that are all the 7 politicians plus other two): \texttt{Politica}, \texttt{Governo}, \texttt{Enrico Rossi}, \texttt{Silvio Berlusconi}, \texttt{Pierluigi Bersani}, \texttt{Beppe Grillo}, \texttt{Matteo Renzi}, \texttt{Gianfranco Fini}, \texttt{Italia dei Valori}\footnote{These are all TAGME anchors.}.
 
 For every tweet we computed the similarity score of every annotation against every topic in this list, summing up each contribution and then dividing by the number of annotations. We took this total sum as the political pertinence score. The best tweets found with this technique are shown in table on figure \ref{tab:pertinence}.
-Not dividing by the number of annotations we get the longest tweets first (because longer tweets have on average more annotations), that is also a possibility, maybe even better than the previous one since we have also more informations in the first tweets (not only pertinence). We also tried to use the maximum instead of the sum, but this is not a good idea: the results were a lot worse compared to \ref{fig:pertinence}. Some statistics about this filtering method are shown in figures \ref{fig:filterdistribution} and \ref{fig:filterPrecision}.
+Not dividing by the number of annotations we get the longest tweets first (because longer tweets have on average more annotations), that is also a possibility, maybe even better than the previous one since we have also more informations in the first tweets (not only pertinence). We also tried to use the maximum instead of the sum, but this is not a good idea: the results were a lot worse compared to \ref{tab:pertinence}. Some statistics about this filtering method are shown in figures \ref{fig:filterdistribution} and \ref{fig:filterPrecision}.
 
 It is worth mentioning that using this dictionary based approach is, in certain sense ``dangerous'' because it's possible to forget (or to include) not significant topics that can alter the filtering. On the other hand it is very simple to realize this approach.
 
