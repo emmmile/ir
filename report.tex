@@ -14,6 +14,7 @@
 \usepackage{tikz}
 \usepackage{pgfplots}
 \usepackage{pgfplotstable}
+\usepackage{amssymb}
 
 \pgfplotsset{
 	every axis/.append style={thick,tick style={semithick}},
@@ -166,7 +167,7 @@ This is outside our goals, also for the lack of informations in the datasets at 
 
 \section{Tweets annotation}
 \label{sec:tagme}
-We have used \href{http://tagme.di.unipi.it/}{TAGME} to annotate tweets, associating some topics to each tweets of the dataset. The topics is associated to the tweets only of the annotation has rho greater than a default threshold.
+We have used \href{http://tagme.di.unipi.it/}{TAGME} to annotate tweets, associating some topics to each tweets of the dataset. The topics is associated to the tweets only of the annotation has rho greater than a default threshold, with value 0.2.
 The tweets, before being processed with TAGME, are cleaned by urls, quotes (so written \textit{@users}). This process is necessary for making tweets more similar to a sentence.
 It could be useful to do analysis about tweets language, for rejecting those not supported by TAGME and indicating to it the language to using for the annotation.
 We have done a simplification in the analysis, assuming that all tweets were written in Italian (only a small percentage of those uses a different language).
@@ -205,20 +206,20 @@ The other two steps instead require to build some kind of dictionary containing 
 
 \subsection{How the merge works}
 \label{sec:merge}
-One fundamental step in the previous procedure is how to merge together informations coming from different users into a single score. We assumed three possible score measures that are very simple to calculate and give a base for furter reasoning. They are, for a fixed pair $(h, a)$ (hashtag, annotation):
+One fundamental step in the previous procedure is how to merge together informations coming from different users into a single score. We assumed three possible score measures that are very simple to calculate and give a base for furter reasoning. They are, for a fixed pair $<h, a>$ (hashtag, annotation):
 \begin{enumerate}
-\item the user count $u(h,a)$, that is simply the number of users that used the pair $(h,a)$ in at least one tweet, indifferently from the number of these tweets. Having a high $u(h,a)$ is an indication of the popularity of the pair $(h,a)$: the hashtag $h$ is used by many users with meaning $a$.
+\item the user count $u(h,a)$, that is simply the number of users that used the pair $<h,a>$ in at least one tweet, indifferently from the number of these tweets. Having a high $u(h,a)$ is an indication of the popularity of the pair $<h,a>$: the hashtag $h$ is used by many users with meaning $a$.
 
-\item the total number of tweets where the $(h,a)$ pair is used, disregaring any information about the users (i.e. the previous indicator). We will indicate this number with $f(h,a)$. This can be easily calculated if $w(u,h,a)$ simply represent the number of tweets written by $u$, where the pair $(h,a)$ is used. In formulas:
+\item the total number of tweets where the $<h,a>$ pair is used, disregaring any information about the users (i.e. the previous indicator). We will indicate this number with $\mathcal{F}(h,a)$. This can be easily calculated if $w(u,h,a)$ simply represent the number of tweets written by $u$, where the pair $<h,a>$ is used. In formulas:
 \begin{equation}
 \label{eqn:frequency}
-f(h,a) = \sum_{u} f(u,h,a)
+\mathcal{F}(h,a) = \sum_{u} f(u,h,a)
 \end{equation}
 An $u(h,a)$ high means that the hashtag $h$ is used often with meaning $a$. On the other hand it can be the result of spamming of a single user.
 
-\item the total sum of the \textit{rho}s if $w(u,h,a)$ is instead based on a $\rho$-weighting. This number will be indicated with $P(h,a)$ in the following part.
+\item the total sum of the \textit{rho}s if $w(u,h,a)$ is instead based on a $\rho$-weighting. This number will be indicated with $\mathcal{P}(h,a)$ in the following part.
 \begin{equation}
-P(h,a) = \sum_{u} P(u,h,a)
+\mathcal{P}(h,a) = \sum_{u} P(u,h,a)
 \end{equation}
 \end{enumerate}
 
@@ -228,38 +229,38 @@ It's clear that the last two measures are strongly related, and in general they 
 u(h,a) = \sum_{u} \boldsymbol{1}_{(0,\infty)}\left( f(u,h,a) \right)
 \end{equation}
 Where $ \boldsymbol{1}_{(0,\infty)}(x) $ is the step function returning 1 only for values greather than 0. This clearly holds because if $ f(u,h,a) $ is greather than 0 means that user $u$ wrote at least one tweet where association $ (h,a) $ exists. The step function makes this contribution count as one.
-The measure $f(h,a)$ (equation \ref{eqn:frequency}) is similar but with a linear function in place of $\boldsymbol{1}_{(0,\infty)}(x)$.
+The measure $\mathcal{F}(h,a)$ (equation \ref{eqn:frequency}) is similar but with a linear function in place of $\boldsymbol{1}_{(0,\infty)}(x)$.
 Having in mind this consideration one can also observe that: %So how to combine these possibilities in a single score?
 
 \begin{itemize}
 \item $u(h,a)$ is important in the final score.
-\item $f(h,a)$ (or $P(h,a)$) shouldn't be negligible. In other words the number of users that used association $(h,a)$ is clearly important, but there should be also some dependance, in the score, on how many times (or how often) a certain user used that association.
+\item $\mathcal{F}(h,a)$ (or $\mathcal{P}(h,a)$) shouldn't be negligible. In other words the number of users that used association $(h,a)$ is clearly important, but there should be also some dependance, in the score, on how many times (or how often) a certain user used that association.
 An high frequency of hashtag $h$ correspondes to a bigger importance of $h$ (with a given meaning $a$), it must appear in the score.
 \end{itemize}
 
 %The number of messages written by $u$ can be a factor to normalize $f(h,a)$ (or $P(h,a)$), in order to get a measure that is closer to $u(h,a)$. 
-A possible idea is to use a different function in equation \ref{eqn:step} (something between a step function and a linear function) in order to get a measure that is closer to $ u(h,a) $ but increasing with $ f(h,a) $. A good score measure can be:
+A possible idea is to use a different function in equation \ref{eqn:step} (something between a step function and a linear function) in order to get a measure that is closer to $ u(h,a) $ but increasing with $ \mathcal{F}(h,a) $. A good score measure can be:
 
 \begin{equation}
 \label{eqn:score}
 \score (h,a) = \sum_{u} \log \left( 1 + w(u,h,a) \right) 
 \end{equation}
 
-Notice that if the logarithm in equation \ref{eqn:score} is in base 2 and the weights used are the number of tweets (so $w(u,h,a) = f(u,h,a)$), the result of this score is always between $u(h,a)$ and $f(h,a)$.
-In fact the argument of the logarithm will be one if there are no tweets for user $u$ containing the hashtag $h$ with meaning $a$, otherwise it will have always a value greater or equal to two, since $f(h,a)$ (for user $u$) will be always greater or equal to one.
+Notice that if the logarithm in equation \ref{eqn:score} is in base 2 and the weights used are the number of tweets (so $w(u,h,a) = f(u,h,a)$), the result of this score is always between $u(h,a)$ and $\mathcal{F}(h,a)$.
+In fact the argument of the logarithm will be one if there are no tweets for user $u$ containing the hashtag $h$ with meaning $a$, otherwise it will have always a value greater or equal to two, since $\mathcal{F}(h,a)$ (for user $u$) will be always greater or equal to one.
 
 \begin{table}[h]
 \centering{
 \begin{tabular}{c | c | c | c}
 %\hline
-example of $f(u,h,a)$ weights for 20 users & $u(h,a)$ & $\score(h,a)$ & $f(h,a)$\\
+example of $f(u,h,a)$ weights for 20 users & $u(h,a)$ & $\score(h,a)$ & $\mathcal{F}(h,a)$\\
 \hline
 1,  1, 1, 1, 1, 1, 1, 1, 1, 1, 6, 1, 1, 1, 2, 1, 2, 1, 1, 2 & 20 & 24.15 & 29 \\
 15, 1, 2, 1, 1, 1, 1, 1, 1, 1, 6, 1, 1, 1, 2, 1, 2, 1, 1, 2 & 20 & 27.15 & 43 \\
 3,  4, 2, 3, 4, 4, 2, 1, 1, 1, 6, 1, 1, 1, 2, 1, 2, 1, 1, 2 & 20 & 30.70 & 43
 \end{tabular}
 }
-\caption{An example of the 3 score measures. Notice how, in the last two cases $\score(h,a)$ increases while $f(h,a)$ remain constant. The difference in the two cases is that in the second row we have a high spike in the number of messages by a certain user, while, in the third row, although the total number of tweets is the same, so the use of hashtag $h$ (with meaning $a$) is better-balanced among more users.}
+\caption{An example of the 3 score measures. Notice how, in the last two cases $\score(h,a)$ increases while $\mathcal{F}(h,a)$ remain constant. The difference in the two cases is that in the second row we have a high spike in the number of messages by a certain user, while, in the third row, although the total number of tweets is the same, so the use of hashtag $h$ (with meaning $a$) is better-balanced among more users.}
 \end{table}
 
 %per allineamento immagini con testo ...
