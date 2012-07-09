@@ -25,7 +25,7 @@
 
 
 \DeclareMathOperator{\score}{score}
-
+\newcommand{\ha}{$\langle h,a \rangle$}
 
 \hypersetup{
     colorlinks=true,       % false: boxed links; true: colored links
@@ -183,7 +183,7 @@ We proceeded in the following steps:
 \begin{enumerate}
 \item Select only tweets that contains at least an hashtag. This has been done with a simple bash command. The tweets those use at least one hashtag are about 16\% of the total (about 3.4 millions over 21).
 \item Filter only tweets that has at least one annotation. This has been done with the script \texttt{tweetsFilter.py}, which opens both the tweet file and the annotated one, discarding tweets with no annotation in the second file.
-\item Collect for every user all the pairs $\langle h,a \rangle$, where $h$ is an hashtag and $a$ an annotation. If for user $u$ exist such a pair, means that $u$ wrote some tweets where $h$ appear as hashtag, and these tweets are annotated with $a$. 
+\item Collect for every user all the pairs \ha is an hashtag and $a$ an annotation. If for user $u$ exist such a pair, means that $u$ wrote some tweets where $h$ appear as hashtag, and these tweets are annotated with $a$. 
 %What relation there is between an hashtag and an annotation, $(h,a)$? Intuitively how much near is the meaning of hashtag $h$ and that of annotation $a$.
 We actually approximate the meaning of an hashtag with some kind of metrics based on the frequency of couple $\langle h,a \rangle$ in the tweets of the user $u$, on its reliability ($\rho$ of annotations) and the number of users that use the hashtag $h$ with meaning $a$. We indicate this metrics with a weight $w(u,h,a)$ that can be computed using the factors just introduced.
 
@@ -268,17 +268,8 @@ example of $f(u,h,a)$ weights for 20 users & $u(h,a)$ & $\score(h,a)$ & $\mathca
 
 \subsection{Popularity vs Frequency}
 Preceding observations about count of the score, suggest us to examine the distribution of hashtags over user-set and tweet-set. The results of this analysis will give us an index of the gooodness of the score count method (equation \ref{eqn:score}).
-We plotted more graphs of hashtags sorted by frequency, trascribing the frequency (in red) and the number of users those using that hashtag (in green) (see figure \ref{fig:plotFrequency}).
+We plotted more graphs of hashtags sorted by frequency, trascribing the frequency (in red) and the number of users those using that hashtag (in green) (see table \ref{fig:plotFrequency}).
 
-%\begin{figure}[h]
-%\centering
-%\subfloat[][\emph{Sum of $\rho$ for each hashtag}.]
-%{\includegraphics[width=.45\columnwidth]{./image/plotSumOfRhos.pdf}}\quad
-%\subfloat[][\emph{$\score(h,a)$ for each hashtag}.]
-%{\includegraphics[width=.45\columnwidth]{./image/plotSumOfRhos.pdf}}
-%\caption{It's manifest how the trend of $\rho$ is the same of frequency, while the score counted with logarithmic function balances the differet between frequency and popularity. DA STAMPARE ANCORA}
-%\label{fig:RhoVsScore}
-%\end{figure}
 
 \begin{figure}[h]
 \centering
@@ -288,15 +279,19 @@ We plotted more graphs of hashtags sorted by frequency, trascribing the frequenc
         %ylabel=hashtag frequency,
         patch type=quadratic spline,
         height=0.45\textheight,
-		width=\textwidth]
+		width=\textwidth,
+		mark size=1.5,
+		ymax=10000]
 
-		\addplot[color=red]   table[x expr=\lineno,y index=1] {plot/frequency-users-500.plot};
-		\addlegendentry{hashtag frequency}
-		\addplot[color=green]   table[x expr=\lineno,y index=2] {plot/frequency-users-500.plot};
+		\addplot[color=red,mark=*,only marks]   table[x=rank,y=users] {plot/frequency-score-users-500.plot};
 		\addlegendentry{hashtag users}
+		\addplot[color=green,mark=x,only marks]   table[x=rank,y=score] {plot/frequency-score-users-500.plot};
+		\addlegendentry{hashtag score}
+		\addplot[color=blue]   table[x=rank,y=frequency] {plot/frequency-score-users-500.plot};
+		\addlegendentry{hashtag frequency}
     \end{axis}
 \end{tikzpicture}
-\caption{For each hashtags it's evident the different between frequency (number of tweets, in red) and the popularity (number of users, in green). Note the big gap for hashtags more frequent.}
+\caption{The ranking of the best \ha pairs in terms of frequency, showing also the other related 2 measures introduced in the previous sections (this cause the big fluctuations of the score and the number of users). The range of the plot has been restricted to $[0,10^4]$ for better viewing.}
 \label{fig:plotFrequency}
 \end{figure}
 
@@ -309,26 +304,22 @@ There is not simple relation between the number of tweets and the number of user
     \begin{loglogaxis}[
     			log basis x = 10,
     			log basis y = 10,
-        patch type=quadratic spline,
-        height=0.45\textheight,
-				width=\textwidth
+        patch type=quadratic spline
 		]
 		
-		\addplot[color=red]   table[x=rank,y=frequency] {plot/frequency-users-1000.plot};
+		\addplot[color=red]   table[x=rank,y=frequency] {plot/frequency-score-users-1000.plot};
 		\addlegendentry{hashtag frequency}
-		\addplot[color=green]   table[x=rank,y=users] {plot/frequency-users-1000.plot};
-		\addlegendentry{hashtag users}
-		\addplot[color=blue,dashdotted,mark=none] table[x=rank,y={create col/linear regression={y=frequency}}] {plot/frequency-users-1000.plot};
+		\addplot[color=blue,dashdotted,mark=none] table[x=rank,y={create col/linear regression={y=frequency}}] {plot/frequency-score-users-1000.plot};
 		\addlegendentry{$ 10^{\pgfmathprintnumber \pgfplotstableregressionb} \cdot x^{\pgfmathprintnumber[print sign] \pgfplotstableregressiona}$}
 		%\addplot {10^\pgfplotstableregressionb * x^\pgfplotstableregressiona};
     \end{loglogaxis}
 \end{tikzpicture}
-\caption{The loglog-plot isn't far from a line. Note the many fluctuations of green line, those confirm, how the popularity of an hashtag can be different from its frequency of use. The many fluctuations (in green) are enhanced by the log scale.}
+\caption{The loglog-plot isn't far from a line. The equation of the interpolated power law is shown in the legend.}
 \label{fig:loglogPlot}
 \end{figure}
 
 
-\begin{figure}[h]
+\begin{table}[h]
 \centering
 \small
 \begin{tabular}[b]{l | r}
@@ -341,9 +332,8 @@ Used in 10000-45941 tweets: &     23 \\ \hline
 Total:	                      & 265656 \\
 \end{tabular}
 \caption{Number of hashtags for subset. The hashtags are divided by their frequency}
-\end{figure}
+\end{table}
 
-%eventualmente deriverò i parametri per la power law con matlab ... (Chiara) da inserire
 
 In figure \ref{fig:plotFrequency} we plot only the first one thousand hashtags. These hashtags appear in 1705623 tweets, while the remaining 264.656 hashtags (out of the plot) appear 1492162 times.
 These numbers are actually upper bounds, because a single tweet may have more hashtags. But on average the first one thousand hashtags cover about the 55\% of the tweets.
