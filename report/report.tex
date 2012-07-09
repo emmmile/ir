@@ -183,9 +183,9 @@ We proceeded in the following steps:
 \begin{enumerate}
 \item Select only tweets that contains at least an hashtag. This has been done with a simple bash command. The tweets those use at least one hashtag are about 16\% of the total (about 3.4 millions over 21).
 \item Filter only tweets that has at least one annotation. This has been done with the script \texttt{tweetsFilter.py}, which opens both the tweet file and the annotated one, discarding tweets with no annotation in the second file.
-\item Collect for every user all the pairs $(h,a)$, where $h$ is an hashtag and $a$ an annotation. If for user $u$ exist such a pair, means that $u$ wrote some tweets where $h$ appear as hashtag, and these tweets are annotated with $a$. 
+\item Collect for every user all the pairs $\langle h,a \rangle$, where $h$ is an hashtag and $a$ an annotation. If for user $u$ exist such a pair, means that $u$ wrote some tweets where $h$ appear as hashtag, and these tweets are annotated with $a$. 
 %What relation there is between an hashtag and an annotation, $(h,a)$? Intuitively how much near is the meaning of hashtag $h$ and that of annotation $a$.
-We actually approximate the meaning of an hashtag with some kind of metrics based on the frequency of couple $(h,a)$ in the tweets of the user $u$, on its reliability ($\rho$ of annotations) and the number of users that use the hashtag $h$ with meaning $a$. We indicate this metrics with a weight $w(u,h,a)$ that can be computed using the factors just introduced.
+We actually approximate the meaning of an hashtag with some kind of metrics based on the frequency of couple $\langle h,a \rangle$ in the tweets of the user $u$, on its reliability ($\rho$ of annotations) and the number of users that use the hashtag $h$ with meaning $a$. We indicate this metrics with a weight $w(u,h,a)$ that can be computed using the factors just introduced.
 
 A first approach can be to consider the number of times that the pair $(h,a)$ has been used by $u$. In this case:
 \begin{equation}
@@ -208,7 +208,7 @@ The other two steps instead require to build some kind of dictionary containing 
 \label{sec:merge}
 One fundamental step in the previous procedure is how to merge together informations coming from different users into a single score. We assumed three possible score measures that are very simple to calculate and give a base for furter reasoning. They are, for a fixed pair $\langle h,a \rangle$, (hashtag, annotation):
 \begin{enumerate}
-\item the user count $u(h,a)$, that is simply the number of users that used the pair $<h,a>$ in at least one tweet, indifferently from the number of these tweets. Having a high $u(h,a)$ is an indication of the popularity of the pair $\langle h,a \rangle$: the hashtag $h$ is used by many users with meaning $a$.
+\item the user count $u(h,a)$, that is simply the number of users that used the pair $\langle h,a \rangle$ in at least one tweet, indifferently from the number of these tweets. Having a high $u(h,a)$ is an indication of the popularity of the pair $\langle h,a \rangle$: the hashtag $h$ is used by many users with meaning $a$.
 
 \item the total number of tweets where the $\langle h,a \rangle$ pair is used, disregaring any information about the users (i.e. the previous indicator). We will indicate this number with $\mathcal{F}(h,a)$. This can be easily calculated if $w(u,h,a)$ simply represent the number of tweets written by $u$, where the pair $\langle h,a \rangle$ is used. In formulas:
 \begin{equation}
@@ -381,11 +381,10 @@ Hashtag & First def & Second def & Third def \\ \hline
  \hline
     \end{tabular}
     \caption{Table of the first three definitions of some hashtags.}
-    \label{tab:pertinence}
 \end{table}
 
 
-\subsection{Tagger}
+\subsection{Hashtagger}
 \label{sec:tagger}
 With the informations collected by the TAGME annotation, we built a little program that, taken a phrase as input, suggest a set of possible hashtags that could describe the topics in that phrase.
 The program works as follow:
@@ -568,7 +567,7 @@ P(u,a_n)
 \end{array}\right]
 \end{equation}
 
-The importance that topic $a_i$ has for user $u$ is denoted by $w(u,a_i,)$. This weight can be calculated in a similar way as we have done in section \ref{sec:merge} but without having the constraint to weight pairs $(h,a)$ (but instead only the annotation $a$).
+The importance that topic $a_i$ has for user $u$ is denoted by $w(u,a_i,)$. This weight can be calculated in a similar way as we have done in section \ref{sec:merge} but without having the constraint to weight pairs $\langle h,a \rangle$ (but instead only the annotation $a$).
 
 Using this $W(u)$ vector should be better than using only the polarity vector for the purpose of computing the user similarity. The reliability of a polarity value should be higher if the importance weight is high (because this corresponds to have more text to compute the polarity value).
 

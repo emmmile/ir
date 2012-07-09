@@ -4,10 +4,15 @@ data/*
 nohup.out
 
 sentiment-analysis/files
-#report.aux
-#report.log
-#report.pdf
-#report.out
+*aux
+*log
+report.pdf
+*out
+*lof
+*dvi
+*blg
+*backup
+*bbl
 
 
 
