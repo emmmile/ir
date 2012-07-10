@@ -479,6 +479,7 @@ We had worked with the second approach defining by hand a set of interesting pol
 For every tweet we computed the similarity score of every annotation against every topic in this list, summing up each contribution and then dividing by the number of annotations. We took this total sum as the political pertinence score. The best tweets found with this technique are shown in table \ref{tab:pertinence}.
 Not dividing by the number of annotations we get the longest tweets first (because longer tweets have on average more annotations), that is also a possibility, maybe even better than the previous one since we have also more informations in the first tweets (not only pertinence). We also tried to use the maximum instead of the sum, but this is not a good idea: the results were a lot worse compared to \ref{tab:pertinence}. Some statistics about this filtering method are shown in figures \ref{fig:filterdistribution} and \ref{fig:filterPrecision}.
 
+
 It is worth mentioning that using this dictionary based approach is, in certain sense ``dangerous'' because it's possible to forget (or to include) not significant topics that can alter the filtering. On the other hand it is very simple to realize this approach.
 
 \begin{table}[h]
@@ -527,7 +528,7 @@ Score & Timeline & UserID & Tweet \\ \hline
 table[y index=0] {plot/filtering2.plot};
 \end{axis}
 \end{tikzpicture}
-\caption{Distribution of the filtering scores in a random set of 10000 tweets; on the $x$-axis there are some equal-width score ranges. Tweets with no annotations are not shown.}
+\caption{Distribution of the filtering scores in a set of 10000 tweets chosen randomly from 21.6 millions of tweets (second dataset); on the $x$-axis there are some equal-width score ranges. Tweets with no annotations are not shown.}
 \label{fig:filterdistribution}
 \end{figure}
 
@@ -551,12 +552,10 @@ table[y index=0] {plot/filtering2.plot};
 		\addlegendentry{recall}
 \end{axis}
 \end{tikzpicture}
-\caption{Precision and recall plot (for a set of about 1800 tweets, chosen randomly among) for the tweet filter.}
+\caption{Precision and recall plot (for a set of about 1800 tweets, chosen randomly from a set of 1.8 millions of tweets with at least one hashtag and one annotation) for the tweet filter.
+The used dataset was classified manually, adding a value on every tweet, to indicate if the tweet talks, or not, about politcs.}
 \label{fig:filterPrecision}
 \end{figure}
-
-
-
 
 
 \section{Sentiment Analysis purpose}
