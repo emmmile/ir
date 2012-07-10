@@ -1,7 +1,7 @@
 \documentclass[a4paper,11pt,oneside]{article}
 
 \usepackage[latin1,utf8]{inputenc}
-\usepackage[english, italian]{babel}
+\usepackage[english, english]{babel}
 \usepackage{amsmath, amsfonts, amssymb, amsthm}
 \usepackage{graphicx}
 \usepackage[hmargin=25mm,vmargin=25mm]{geometry}
@@ -15,6 +15,8 @@
 \usepackage{pgfplots}
 \usepackage{pgfplotstable}
 \usepackage{amssymb}
+\usepackage{xspace} %serve per mettere uno spazio dopo le macro, che altrimenti mangiano lo spazio immediatamente successivo: http://tex.stackexchange.com/questions/31091/space-after-latex-commands
+
 
 \pgfplotsset{
 	every axis/.append style={thick,tick style={semithick}},
@@ -25,7 +27,9 @@
 
 
 \DeclareMathOperator{\score}{score}
-\newcommand{\ha}{$\langle h,a \rangle$}
+\newcommand{\ha}{$\langle h,a \rangle$\xspace}
+\newcommand{\fha}{$\mathcal{F}(h,a)$\xspace}
+\newcommand{\sha}{$\score(h,a)$\xspace}
 
 \hypersetup{
     colorlinks=true,       % false: boxed links; true: colored links
@@ -168,24 +172,23 @@ This is outside our goals, also for the lack of informations in the datasets at 
 \section{Tweets annotation}
 \label{sec:tagme}
 We have used \href{http://tagme.di.unipi.it/}{TAGME} to annotate tweets, associating some topics to each tweets of the dataset. The topics is associated to the tweets only of the annotation has rho greater than a default threshold, with value 0.2.
-The tweets, before being processed with TAGME, are cleaned by urls, quotes (so written \textit{@users}). This process is necessary for making tweets more similar to a sentence.
+The tweets, before being processed with TAGME, are cleaned by urls and quotes (so expressions of the type \textit{@user}). This process is necessary for making tweets more similar to a sentence.
 It could be useful to do analysis about tweets language, for rejecting those not supported by TAGME and indicating to it the language to using for the annotation.
 We have done a simplification in the analysis, assuming that all tweets were written in Italian (only a small percentage of those uses a different language).
-An additional preprocessing done above tweets, is the replacement of numeric character references in tweets (like in all web text, \textsl{\&\#N;}, where \textit{N} is a number) with its unicode character.
+An additional preprocessing that we have done, is the replacement of the HTML character codes (like like for example, \textsl{\&\#N;}, where \textit{N} is a number) with its unicode character.
 
 
 \section{Hashtags semantic}
 \label{sec:hashtags}
-In this part we used the tweets from the users of the second dataset, because it was bigger. We tried to use \href{http://tagme.di.unipi.it/}{TAGME} to give to hashtags a meaning, that is associating to each hashtag a list of topics that can be taken as its ``description''. We also wanted to rank these topics, for every tag.
-
+In this part we used the tweets from the users of the second dataset, because it was bigger. We tried to use \href{http://tagme.di.unipi.it/}{TAGME} to give to hashtags a meaning, that is associating to each hashtag a list of topics that can be taken as its ``description''. We also wanted to rank these topics, for every hashtag, in order to understand which topics are the best description.
 We proceeded in the following steps:
 
 \begin{enumerate}
 \item Select only tweets that contains at least an hashtag. This has been done with a simple bash command. The tweets those use at least one hashtag are about 16\% of the total (about 3.4 millions over 21).
-\item Filter only tweets that has at least one annotation. This has been done with the script \texttt{tweetsFilter.py}, which opens both the tweet file and the annotated one, discarding tweets with no annotation in the second file.
-\item Collect for every user all the pairs \ha is an hashtag and $a$ an annotation. If for user $u$ exist such a pair, means that $u$ wrote some tweets where $h$ appear as hashtag, and these tweets are annotated with $a$. 
+\item Filter only tweets that has at least one annotation. This has been done with the script \texttt{tweetsFilter.py}, which opens both the tweet file and the annotated one, discarding tweets with no annotation in the second file. This filtering further reduce the number of tweets from 3.4 millions to 1.9 millions.
+\item Collect for every user all the pairs \ha, where $h$ is an hashtag and $a$ an annotation. If for user $u$ exist such a pair, means that $u$ wrote some tweets where $h$ appear as hashtag, and these tweets are annotated with $a$. 
 %What relation there is between an hashtag and an annotation, \ha? Intuitively how much near is the meaning of hashtag $h$ and that of annotation $a$.
-We actually approximate the meaning of an hashtag with some kind of metrics based on the frequency of couple $\langle h,a \rangle$ in the tweets of the user $u$, on its reliability ($\rho$ of annotations) and the number of users that use the hashtag $h$ with meaning $a$. We indicate this metrics with a weight $w(u,h,a)$ that can be computed using the factors just introduced.
+We actually approximate the meaning of an hashtag with some kind of metrics based on the frequency of couple \ha in the tweets of the user $u$, on its reliability ($\rho$ of annotations) and the number of users that use the hashtag $h$ with meaning $a$. We indicate this metrics with a weight $w(u,h,a)$ that can be computed using the factors just introduced.
 
 A first approach can be to consider the number of times that the pair \ha has been used by $u$. In this case:
 \begin{equation}
@@ -195,8 +198,8 @@ A second approach could be to use the sum of the \textit{rho}s of the annotation
 \begin{equation}
 w(u,h,a) = P(u,h,a) = \text{sum of $\rho$'s of annotations where $u$ used the association \ha}
 \end{equation} 
-For further details see the script \texttt{hashtagAnnotation.py}.
-\item Merge all the informations produced above creating a unique score for association \ha, summing up the contributions of the various users. This has been done with the script \texttt{hashtagMerge.py}. Here the annotations are sorted by their importance, as explained in section \ref{sec:merge}.
+For further details see the script \texttt{hashtagAnnotation.py}, that reads the tweets file and the correspondent annotation, producing an output file for the next step.
+\item Merge all the informations produced above creating a unique score for the association \ha, summing up the contributions of the various users. This has been done with the script \texttt{hashtagMerge.py}. Here the annotations are sorted by their importance, as explained in section \ref{sec:merge}.
 \end{enumerate}
 
 The last two points could have been realized in one single step, but for simplicity and further extensions we preferred to keep the two parts separated. The time (and I/O) complexity of the first two steps is linear in the number of tweets: it is necessary to keep only one tweet at the time in the internal memory. 
@@ -215,7 +218,7 @@ One fundamental step in the previous procedure is how to merge together informat
 \label{eqn:frequency}
 \mathcal{F}(h,a) = \sum_{u} f(u,h,a)
 \end{equation}
-An $u(h,a)$ high means that the hashtag $h$ is used often with meaning $a$. On the other hand it can be the result of spamming of a single user.
+A high $\mathcal{F}(h,a)$ means that the hashtag $h$ is used often with meaning $a$. On the other hand it can be the result of spamming of a single user.
 
 \item the total sum of the \textit{rho}s if $w(u,h,a)$ is instead based on a $\rho$-weighting. This number will be indicated with $\mathcal{P}(h,a)$ in the following part.
 \begin{equation}
@@ -235,7 +238,7 @@ Having in mind this consideration one can also observe that: %So how to combine 
 \begin{itemize}
 \item $u(h,a)$ is important in the final score.
 \item $\mathcal{F}(h,a)$ (or $\mathcal{P}(h,a)$) shouldn't be negligible. In other words the number of users that used association \ha is clearly important, but there should be also some dependance, in the score, on how many times (or how often) a certain user used that association.
-An high frequency of hashtag $h$ correspondes to a bigger importance of $h$ (with a given meaning $a$), it must appear in the score.
+An high frequency of hashtag $h$ correspondes to a bigger importance of $h$ (with a given meaning $a$), and it must appear in the score.
 \end{itemize}
 
 %The number of messages written by $u$ can be a factor to normalize $f(h,a)$ (or $P(h,a)$), in order to get a measure that is closer to $u(h,a)$. 
@@ -246,8 +249,9 @@ A possible idea is to use a different function in equation \ref{eqn:step} (somet
 \score (h,a) = \sum_{u} \log \left( 1 + w(u,h,a) \right) 
 \end{equation}
 
-Notice that if the logarithm in equation \ref{eqn:score} is in base 2 and the weights used are the number of tweets (so $w(u,h,a) = f(u,h,a)$), the result of this score is always between $u(h,a)$ and $\mathcal{F}(h,a)$.
-In fact the argument of the logarithm will be one if there are no tweets for user $u$ containing the hashtag $h$ with meaning $a$, otherwise it will have always a value greater or equal to two, since $\mathcal{F}(h,a)$ (for user $u$) will be always greater or equal to one.
+Notice that if the logarithm in equation \ref{eqn:score} is in base 2 and the weights used are the number of tweets (so $w(u,h,a) = f(u,h,a)$), the result of this score is always between $u(h,a)$ and $\mathcal{F}(h,a)$, as we wanted.
+In fact the argument of the logarithm will be one if there are no tweets for user $u$ containing the hashtag $h$ with meaning $a$; in this case the contribution to the score is zero.
+Otherwise $1 + f(u,h,a)$ will always be greater or equal to two: in this case each tweet contributes at least as 1 in the final score (so it can't be smaller than $u(h,a)$), but for sure it contributes less than $f(u,h,a)$ because $\log( 1 + x ) < x$, for $x \geq 1$.
 
 \begin{table}[h]
 \centering{
@@ -260,16 +264,13 @@ example of $f(u,h,a)$ weights for 20 users & $u(h,a)$ & $\score(h,a)$ & $\mathca
 3,  4, 2, 3, 4, 4, 2, 1, 1, 1, 6, 1, 1, 1, 2, 1, 2, 1, 1, 2 & 20 & 30.70 & 43
 \end{tabular}
 }
-\caption{An example of the 3 score measures. Notice how, in the last two cases $\score(h,a)$ increases while $\mathcal{F}(h,a)$ remain constant. The difference in the two cases is that in the second row we have a high spike in the number of messages by a certain user, while, in the third row, although the total number of tweets is the same, so the use of hashtag $h$ (with meaning $a$) is better-balanced among more users.}
+\caption{An example of the 3 score measures. Notice how, in the last two cases $\score(h,a)$ increases while $\mathcal{F}(h,a)$ remain constant. The difference in the two cases is that in the second row we have a high spike in the number of messages by a certain user, while in the third row, although the total number of tweets is the same, the use of hashtag $h$ (with meaning $a$) is better balanced among the users.}
 \end{table}
 
-%per allineamento immagini con testo ...
-%\newpage
 
 \subsection{Popularity vs Frequency}
-Preceding observations about count of the score, suggest us to examine the distribution of hashtags over user-set and tweet-set. The results of this analysis will give us an index of the gooodness of the score count method (equation \ref{eqn:score}).
-We plotted more graphs of hashtags sorted by frequency, trascribing the frequency (in red) and the number of users those using that hashtag (in green) (see table \ref{fig:plotFrequency}).
-
+Preceding observations about count of the score, suggest us to examine the distribution of hashtags over user-set and tweet-set. The results of this analysis will give us an index of the goodness of the score we defined (equation \ref{eqn:score}).
+We plotted the scores of the best \ha pairs sorted by their score, keeping also the other two measures (see plot \ref{fig:plotFrequency}).
 
 \begin{figure}[h]
 \centering
@@ -283,20 +284,20 @@ We plotted more graphs of hashtags sorted by frequency, trascribing the frequenc
 		mark size=1.5,
 		ymax=10000]
 
-		\addplot[color=red,mark=*,only marks]   table[x=rank,y=users] {plot/frequency-score-users-500.plot};
-		\addlegendentry{hashtag users}
-		\addplot[color=green,mark=x,only marks]   table[x=rank,y=score] {plot/frequency-score-users-500.plot};
-		\addlegendentry{hashtag score}
-		\addplot[color=blue]   table[x=rank,y=frequency] {plot/frequency-score-users-500.plot};
-		\addlegendentry{hashtag frequency}
+		\addplot[color=red]   table[x=rank,y=users] {plot/frequency-score-users-500-sorted-on-score.plot};
+		\addlegendentry{\ha users}
+		\addplot[color=green]   table[x=rank,y=score] {plot/frequency-score-users-500-sorted-on-score.plot};
+		\addlegendentry{\ha score}
+		\addplot[color=blue]   table[x=rank,y=frequency] {plot/frequency-score-users-500-sorted-on-score.plot};
+		\addlegendentry{\ha frequency}
     \end{axis}
 \end{tikzpicture}
-\caption{The ranking of the best \ha pairs in terms of frequency, showing also the other related 2 measures introduced in the previous sections (this cause the big fluctuations of the score and the number of users). The range of the plot has been restricted to $[0,10^4]$ for better viewing.}
+\caption{The ranking of the best \ha pairs in terms of \sha, showing also the other related 2 measures introduced in the previous sections. Since the order in the ranking depends on \sha, there are big fluctuations in the frequency and the number of users. The range of the plot has been restricted to $[0,10^4]$ for better viewing.}
 \label{fig:plotFrequency}
 \end{figure}
 
-Observing the graphs we can note how fast the frequency of hashtags changes. The trend is near to a power law, a relation $f(x) = ax^k$. For this reason we plotted it in a loglog space (see figure \ref{fig:loglogPlot}), where according to a power law it should be a line.
-There is not simple relation between the number of tweets and the number of users, that used the hashtag $h$, even if the trend is the same.
+Observing the plots we can note how fast the frequency (and the score) of the \ha pairs decreases. The trend is near to a power law, a relation $f(x) = ax^k$; for this reason we plotted it also in a loglog space (see figure \ref{fig:loglogPlot}), where according to a power law it should be a line.
+There is not simple relation between the number of tweets and the number of users, that used the \ha association, even if the trend seems to be the same.
 
 \begin{figure}[h]
 \centering
@@ -307,44 +308,41 @@ There is not simple relation between the number of tweets and the number of user
         patch type=quadratic spline
 		]
 		
-		\addplot[color=red]   table[x=rank,y=frequency] {plot/frequency-score-users-1000.plot};
-		\addlegendentry{hashtag frequency}
-		\addplot[color=blue,dashdotted,mark=none] table[x=rank,y={create col/linear regression={y=frequency}}] {plot/frequency-score-users-1000.plot};
+		\addplot[color=green]   table[x=rank,y=score] {plot/frequency-score-users-1000-sorted-on-score.plot};
+		\addlegendentry{\ha score}
+		\addplot[color=blue,dashdotted,mark=none] table[x=rank,y={create col/linear regression={y=score}}] {plot/frequency-score-users-1000-sorted-on-score.plot};
 		\addlegendentry{$ 10^{\pgfmathprintnumber \pgfplotstableregressionb} \cdot x^{\pgfmathprintnumber[print sign] \pgfplotstableregressiona}$}
 		%\addplot {10^\pgfplotstableregressionb * x^\pgfplotstableregressiona};
     \end{loglogaxis}
 \end{tikzpicture}
-\caption{The loglog-plot isn't far from a line. The equation of the interpolated power law is shown in the legend.}
+\caption{The loglog-plot of the best \sha pairs isn't far from a line. The equation of the interpolated power law is shown in the legend.}
 \label{fig:loglogPlot}
 \end{figure}
 
+%Non ho idea di come piazzare queste due cose visto che adesso sono scollegate dal resto:
 
-\begin{table}[h]
-\centering
-\small
-\begin{tabular}[b]{l | r}
-Used in 0-9 tweets:         & 241307 \\ %\hline
-Used in 10-99 tweets:       &  20733 \\ %\hline
-Used in 100-499 tweets:     &   2778 \\ %\hline
-Used in 500-999 tweets:     &    414 \\ %\hline
-Used in 1000-9999 tweets:   &    401 \\ %\hline
-Used in 10000-45941 tweets: &     23 \\ \hline
-Total:	                      & 265656 \\
-\end{tabular}
-\caption{Number of hashtags for subset. The hashtags are divided by their frequency}
-\end{table}
+%\begin{table}[h]
+%\centering
+%\small
+%\begin{tabular}[b]{l | r}
+%Used in 0-9 tweets:         & 241307 \\ %\hline
+%Used in 10-99 tweets:       &  20733 \\ %\hline
+%Used in 100-499 tweets:     &   2778 \\ %\hline
+%Used in 500-999 tweets:     &    414 \\ %\hline
+%Used in 1000-9999 tweets:   &    401 \\ %\hline
+%Used in 10000-45941 tweets: &     23 \\ \hline
+%Total:	                      & 265656 \\
+%\end{tabular}
+%\caption{Number of hashtags for subset. The hashtags are divided by their frequency}
+%\end{table}
+
+%In figure \ref{fig:plotFrequency} we plot only the first one thousand hashtags. These hashtags appear in 1705623 tweets, while the remaining 264.656 hashtags (out of the plot) appear 1492162 times.
+%These numbers are actually upper bounds, because a single tweet may have more hashtags. But on average the first one thousand hashtags cover about the 55\% of the tweets.
+
+A so unbalanced distribution of the frequency function of \ha pairs has repercussions on the semantic association itself. To have many tweets (thousands) containing the same hashtag, allows to have more text associated to it and, consequently, to have better semantic annotation through TAGME.
+In fact if the hashtag is annotated with TAGME many times, in different tweets, possible TAGME's mistakes are lessened because they are ``averaged''.
 
 
-In figure \ref{fig:plotFrequency} we plot only the first one thousand hashtags. These hashtags appear in 1705623 tweets, while the remaining 264.656 hashtags (out of the plot) appear 1492162 times.
-These numbers are actually upper bounds, because a single tweet may have more hashtags. But on average the first one thousand hashtags cover about the 55\% of the tweets.
-
-A so unbalanced distribution of the frequency-function of hashtags has repercussions on the association of semantic annotations, done with the process described in section \ref{sec:merge}.
-To have many tweets (thousands) containing the same hashtag, allows to have more text associated to it and, consequently, to do better semantic through TAGME annotation.
-In fact if the hashtag is annotated with TAGME many times, in different tweets, possible TAGME's mistakes are lessened doing the average of results.
-
-
-%per allineamento immagini con testo ...
-%\newpage
 
 \subsection{Other meanings}
 We downloaded some hashtag definitions from \href{http://tagdef.com/}{tagdef.com}. Tagdef.com is a web server, that can be used for looking up an hashtag definition, and voting it.

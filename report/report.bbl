@@ -1,11 +1,4 @@
-\begin{thebibliography}{10}
-
-\bibitem{DBLP:conf/mcetech/2011}
-Gilbert Babin, Katarina Stanoevska-Slabeva, and Peter Kropf, editors.
-\newblock {\em E-Technologies: Transformation in a Connected World - 5th
-  International Conference, MCETECH 2011, Les Diablerets, Switzerland, January
-  23-26, 2011, Revised Selected Papers}, volume~78 of {\em Lecture Notes in
-  Business Information Processing}. Springer, 2011.
+\begin{thebibliography}{1}
 
 \bibitem{baccianella}
 Stefano Baccianella, Andrea Esuli, and Fabrizio Sebastiani.
@@ -40,7 +33,9 @@ Jeff Clark.
 Cate Huston, Michael Weiss, and Morad Benyoucef.
 \newblock Following the conversation: A more meaningful expression of
   engagement.
-\newblock In Babin et~al. \cite{DBLP:conf/mcetech/2011}, pages 199--210.
+\newblock In Gilbert Babin, Katarina Stanoevska-Slabeva, and Peter Kropf,
+  editors, {\em MCETECH}, volume~78 of {\em Lecture Notes in Business
+  Information Processing}, pages 199--210. Springer, 2011.
 
 \bibitem{Kin}
 Gary King, Matthew Knowles, and Steven Melendez.

@@ -1,4 +1,0 @@
-\select@language {english}
-\contentsline {figure}{\numberline {1}{\ignorespaces For each hashtas it's evident the diffent between frequency (number of tweets, in red) and the popolarity (number of users, in green). Note the big gap for hashtags more frequent.\relax }}{5}{figure.caption.5}
-\contentsline {figure}{\numberline {2}{\ignorespaces It's manifest how the trend of $\rho $ is the same of frequency\relax }}{6}{figure.caption.6}
-\contentsline {figure}{\numberline {3}{\ignorespaces An example of two phrases that, despite having many common terms, describe very different messages. Also using TAGME we can't resolve this problem, and a program that calculates user similarity only with these informations will not get the differences in the two expressions.\relax }}{6}{figure.caption.7}
