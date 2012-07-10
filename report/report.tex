@@ -473,7 +473,14 @@ The first thing we wanted to do in this part is to distinguish tweets speaking a
 	ybar interval,
 	ymin=0,
 	xmin=0,xmax=3000,
-	xticklabel={$[\pgfmathprintnumber[fixed]\tick,\cdot)$},
+	xticklabel={
+	  \ifdim\tick pt=0pt
+	    $(0,\cdot)$
+	  \else
+	    $[\pgfmathprintnumber[fixed]{\tick},\cdot)$
+	  \fi
+	},
+	%xticklabel={$[\pgfmathprintnumber[fixed]\tick,\cdot)$},
 	%xticklabel=\pgfmathprintnumber\tick--\pgfmathprintnumber\nexttick
 	height=0.45\textheight,
 	width=\textwidth,
