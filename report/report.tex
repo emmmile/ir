@@ -243,7 +243,7 @@ A possible idea is to use a different function in equation \ref{eqn:step} (somet
 
 \begin{equation}
 \label{eqn:score}
-\score (h,a) = \sum_{u} \log \left( 1 + w(u,h,a) \right) 
+\score (h,a) = \sum_{u} \log _2 \left( 1 + w(u,h,a) \right) 
 \end{equation}
 
 Notice that if the logarithm in equation \ref{eqn:score} is in base 2 and the weights used are the number of tweets (so $w(u,h,a) = f(u,h,a)$), the result of this score is always between $u(h,a)$ and $\mathcal{F}(h,a)$.
@@ -348,7 +348,7 @@ In fact if the hashtag is annotated with TAGME many times, in different tweets, 
 
 \subsection{Other meanings}
 We downloaded some hashtag definitions from \href{http://tagdef.com/}{tagdef.com}. Tagdef.com is a web server, that can be used for looking up an hashtag definition, and voting it.
-If the definition doesn't exist or isn't good, the server allows you to create your own definition in few seconds. So it's possible to obtain up to five definitions for an hashtag, sorted by the votes of users \ref{tab:hashDef}. All twitter-users can contribute to grow the database of definitions (as in Wikipedia).
+The server allows to create up to five definitions for distinct hashtag. On request, it is possible to obtain up the definitions for an hashtag, sorted by the votes of users, some examples in table \ref{tab:hashDef}. All twitter-users can contribute to grow the database of definitions (as in Wikipedia).
 We observe that the hashtags with definition are approximately a half of the total, so this can be considered a good instrument to compare the meanings (annotations) obtained by tweets with those extracted by the users definitions.
 This match is a possible test of reliability of the application of TAGME on the tweets. %ranking the annotations of user's definitions as the real semantic of hashtag.
 
@@ -369,7 +369,7 @@ berlusconi & \footnotesize{Italian long-time entrepreneur, politician and now Pr
 raiperunanotte & \footnotesize{Italian streamed and free version of a TV talk show called \#annozero, which was instead censored by \#berlusconi. On march\dots} & \footnotesize{\# let it not be for one night only \# let it be freedom for all and forever} & \footnotesize{Raiperunanotte is the first step to restore democracy, freedom and justice in Italy. Thanks to the web\dots}\\
  \hline
     \end{tabular}
-    \caption{Table of the first three definitions of some hashtags.}
+    \caption{Table of the first three definitions of some hashtags. To note that the definitions are written in many languages (english, spanish, italian\dots).}
     \label{tab:hashDef}
 \end{table}
 
@@ -390,13 +390,13 @@ This program in practice propose the ``best'' hashtags for a given text, based o
 \centering
     \begin{tabular}{ | l | p{8cm} |}
     \hline
-Tweet & Hashtags \\ \hline
-Berlusconi è l'ex-presidente del consiglio & \#berlusconi s=2935 \#annozero s=377 \#ballar \#pdl \#laresadeiconti \#italy \#politica \#finecorsa \#italia \#rubygate\\
-Monti giura e nomina il nuovo governo & \#governo s=345 \#berlusconi s=227 \#italia \#politica \#monti \#fiducia \#pdl \#opencamera \#referendum \#annozero\\
-Grillo stravince a Parma, antipolica prende campo & \#parma s=456 \#annozero s=150  \#grillo \#parmalat \#notav \#m5s  \#juventus \#beppegrillo \#beppe \#calcio\\
+Tweet & Hashtags sorted by the score (shows for the first two)\\ \hline
+Berlusconi è l'ex-presidente del consiglio & \footnotesize{\#berlusconi s=2935 \#annozero s=377 \#ballar \#pdl \#laresadeiconti \#italy \#politica \#finecorsa \#italia \#rubygate}\\
+Monti giura e nomina il nuovo governo & \footnotesize{\#governo s=345 \#berlusconi s=227 \#italia \#politica \#monti \#fiducia \#pdl \#opencamera \#referendum \#annozero}\\
+Grillo stravince a Parma, l'antipolitica prende campo & \footnotesize{\#parma s=456 \#annozero s=150  \#grillo \#parmalat \#notav \#m5s  \#juventus \#beppegrillo \#beppe \#calcio}\\
 \hline
     \end{tabular}
-    \caption{Examples of tagger use.}
+    \caption{Examples of tagger use. The hashtags are sorted by score. At every tweets can be associated more annotations, then the found hashtags range over the relatived topics .}
     \label{tab:tagger}
 \end{table}
 
