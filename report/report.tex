@@ -16,6 +16,7 @@
 \usepackage{pgfplotstable}
 \usepackage{amssymb}
 \usepackage{xspace} %serve per mettere uno spazio dopo le macro, che altrimenti mangiano lo spazio immediatamente successivo: http://tex.stackexchange.com/questions/31091/space-after-latex-commands
+\usepackage{array}
 
 
 \pgfplotsset{
@@ -272,14 +273,14 @@ example of $f(u,h,a)$ weights for 20 users & $u(h,a)$ & $\score(h,a)$ & $\mathca
 Preceding observations about count of the score, suggest us to examine the distribution of hashtags over user-set and tweet-set. The results of this analysis will give us an index of the goodness of the score we defined (equation \ref{eqn:score}).
 We plotted the scores of the best \ha pairs sorted by their score, keeping also the other two measures (see plot \ref{fig:plotFrequency}).
 
-\begin{figure}[h]
+\begin{figure}[h!]
 \centering
 \begin{tikzpicture}
     \begin{axis}[
-        %xlabel=Hashtag score,
-        %ylabel=hashtag frequency,
+        xlabel=rank,
+        ylabel=score,
         patch type=quadratic spline,
-        height=0.45\textheight,
+        height=0.42\textheight,
 		width=\textwidth,
 		mark size=1.5,
 		ymax=10000]
@@ -296,16 +297,17 @@ We plotted the scores of the best \ha pairs sorted by their score, keeping also 
 \label{fig:plotFrequency}
 \end{figure}
 
-Observing the plots we can note how fast the frequency (and the score) of the \ha pairs decreases. The trend is near to a power law, a relation $f(x) = ax^k$; for this reason we plotted it also in a loglog space (see figure \ref{fig:loglogPlot}), where according to a power law it should be a line.
-There is not simple relation between the number of tweets and the number of users, that used the \ha association, even if the trend seems to be the same.
-
-\begin{figure}[h]
+\begin{figure}[h!]
 \centering
 \begin{tikzpicture}
     \begin{loglogaxis}[
+        xlabel=rank,
+        ylabel=score,
     			log basis x = 10,
     			log basis y = 10,
-        patch type=quadratic spline
+        patch type=quadratic spline,
+  				height=0.42\textheight,
+				width=\textwidth,
 		]
 		
 		\addplot[color=green]   table[x=rank,y=score] {plot/frequency-score-users-1000-sorted-on-score.plot};
@@ -318,6 +320,9 @@ There is not simple relation between the number of tweets and the number of user
 \caption{The loglog-plot of the best \sha pairs isn't far from a line. The equation of the interpolated power law is shown in the legend.}
 \label{fig:loglogPlot}
 \end{figure}
+
+Observing the plots we can note how fast the frequency (and the score) of the \ha pairs decreases. The trend is near to a power law, a relation $f(x) = ax^k$; for this reason we plotted it also in a loglog space (see figure \ref{fig:loglogPlot}), where according to a power law it should be a line.
+There is not simple relation between the number of tweets and the number of users, that used the \ha association, even if the trend seems to be the same.
 
 %Non ho idea di come piazzare queste due cose visto che adesso sono scollegate dal resto:
 
@@ -367,7 +372,7 @@ berlusconi & \footnotesize{Italian long-time entrepreneur, politician and now Pr
 raiperunanotte & \footnotesize{Italian streamed and free version of a TV talk show called \#annozero, which was instead censored by \#berlusconi. On march\dots} & \footnotesize{\# let it not be for one night only \# let it be freedom for all and forever} & \footnotesize{Raiperunanotte is the first step to restore democracy, freedom and justice in Italy. Thanks to the web\dots}\\
  \hline
     \end{tabular}
-    \caption{Table of the first three definitions of some hashtags. To note that the definitions are written in many languages (english, spanish, italian\dots).}
+    \caption{Table of the first three definitions of some hashtags. Notice that the definitions are written in many languages (english, spanish, italian\dots).}
     \label{tab:hashDef}
 \end{table}
 
@@ -386,15 +391,31 @@ This program in practice propose the ``best'' hashtags for a given text, based o
 
 \begin{table}[h]
 \centering
-    \begin{tabular}{ | l | p{8cm} |}
-    \hline
-Tweet & Hashtags sorted by the score (shows for the first two)\\ \hline
-Berlusconi è l'ex-presidente del consiglio & \footnotesize{\#berlusconi s=2935 \#annozero s=377 \#ballar \#pdl \#laresadeiconti \#italy \#politica \#finecorsa \#italia \#rubygate}\\
-Monti giura e nomina il nuovo governo & \footnotesize{\#governo s=345 \#berlusconi s=227 \#italia \#politica \#monti \#fiducia \#pdl \#opencamera \#referendum \#annozero}\\
-Grillo stravince a Parma, l'antipolitica prende campo & \footnotesize{\#parma s=456 \#annozero s=150  \#grillo \#parmalat \#notav \#m5s  \#juventus \#beppegrillo \#beppe \#calcio}\\
-\hline
+\footnotesize
+    \begin{tabular}{| >{\centering\arraybackslash} m{7cm} | m{6.5cm} |} %serve per l'allineamento al centro
+				\hline
+				Tweet & Hashtags sorted by the score\\ \hline
+				``Berlusconi è l'ex-presidente del consiglio'' & 
+				\parbox[t]{6.5cm}{\raggedright %serve per l'allineamento a sinistra
+						\#berlusconi s=2935 \#annozero s=377 \break
+						\#ballar \#pdl \#laresadeiconti \#italy \break
+						\#politica \#finecorsa \#italia \#rubygate\\
+				}\\ \hline
+				``Monti giura e nomina il nuovo governo'' & 
+				\parbox[t]{6.5cm}{\raggedright
+						\#governo s=345 \#berlusconi s=227 \break
+						\#italia \#politica \#monti \#fiducia \break
+						\#pdl \#opencamera \#referendum \#annozero\\
+				}\\ \hline
+				``Grillo stravince a Parma, l'antipolitica prende campo'' & 
+				\parbox[t]{6.5cm}{\raggedright
+						\#parma s=456 \#annozero s=150\break
+						\#grillo \#parmalat \#notav \#m5s\break
+						\#juventus \#beppegrillo \#beppe \#calcio\\
+				}\\
+				\hline
     \end{tabular}
-    \caption{Examples of tagger use. The hashtags are sorted by score. At every tweets can be associated more annotations, then the found hashtags range over the relatived topics .}
+    \caption{Examples of the hashtagger use. The hashtags are sorted by the score (only the first 2 score are reported). At every tweet can be associated more annotations $a_i$, then the respective hashtags in the pairs $\langle a_i, h \rangle$ with higher score are considered.}
     \label{tab:tagger}
 \end{table}
 
@@ -449,19 +470,20 @@ The first thing we wanted to do in this part is to distinguish tweets speaking a
 \begin{tikzpicture}
 \pgfkeys{/pgf/number format/.cd,fixed,fixed zerofill,precision=0}
 \begin{axis}[
-ybar interval,
-ymin=0,
-xmin=0,xmax=3000,
-xticklabel={$[\pgfmathprintnumber[fixed]\tick,\cdot)$},
-%xticklabel=\pgfmathprintnumber\tick--\pgfmathprintnumber\nexttick
-height=0.45\textheight,
-width=0.9\textwidth
+	ybar interval,
+	ymin=0,
+	xmin=0,xmax=3000,
+	xticklabel={$[\pgfmathprintnumber[fixed]\tick,\cdot)$},
+	%xticklabel=\pgfmathprintnumber\tick--\pgfmathprintnumber\nexttick
+	height=0.45\textheight,
+	width=\textwidth,
+	ylabel=number of tweets,
 ]
 \addplot+[hist={bins=10}]
 table[y index=0] {plot/filtering2.plot};
 \end{axis}
 \end{tikzpicture}
-\caption{Distribution of the filtering scores in a random set of 10000 tweets. Tweets with no annotations are not shown.}
+\caption{Distribution of the filtering scores in a random set of 10000 tweets; on the $x$-axis there are some equal-length score ranges. Tweets with no annotations are not shown.}
 \label{fig:filterdistribution}
 \end{figure}
 
@@ -471,14 +493,15 @@ table[y index=0] {plot/filtering2.plot};
 \centering
 \begin{tikzpicture}
 \begin{axis}[
-  xlabel=Score's threshold,
+  xlabel=score's threshold,
   height=0.45\textheight,
-	width=0.9\textwidth,
+	width=\textwidth,
 	xmin=0,
 	xmax=2400,
 	ymin=0,
 	ymax=1,
-	legend pos=south west]
+	legend pos=south west
+]
 		
 		\addplot[color=red,smooth]   table[x index=0,y index=1] {plot/precision-recall.plot};
 		\addlegendentry{precision}
@@ -500,7 +523,7 @@ This filtering can be done in many ways:
 
 Of course the second approach is heavily influenced on how much precise is the annotator. In fact it's easy that many tweets speaking about politics are lost in this procedure.
 
-We had worked with the second approach defining by hand a set of interesting political topics (that are all the 7 politicians plus other two): \texttt{Politica}, \texttt{Governo}, \texttt{Enrico Rossi}, \texttt{Silvio Berlusconi}, \texttt{Pierluigi Bersani}, \texttt{Beppe Grillo}, \texttt{Matteo Renzi}, \texttt{Gianfranco Fini}, \texttt{Italia dei Valori}\footnote{These are all TAGME anchors.}.
+We had worked with the second approach defining by hand a set of interesting political topics (that are all the 7 politicians\footnote{The dataset we used is actually composed by the tweets coming by the users of 13 politicians. We don't know the other 6 politicians chosen by the Daniele De Sensi, Andrea Cicalese and Gabriele Piccinno's group.} plus other two): \texttt{Politica}, \texttt{Governo}, \texttt{Enrico Rossi}, \texttt{Silvio Berlusconi}, \texttt{Pierluigi Bersani}, \texttt{Beppe Grillo}, \texttt{Matteo Renzi}, \texttt{Gianfranco Fini}, \texttt{Italia dei Valori}. Notice that these are all TAGME anchors.
 
 For every tweet we computed the similarity score of every annotation against every topic in this list, summing up each contribution and then dividing by the number of annotations. We took this total sum as the political pertinence score. The best tweets found with this technique are shown in table on figure \ref{tab:pertinence}.
 Not dividing by the number of annotations we get the longest tweets first (because longer tweets have on average more annotations), that is also a possibility, maybe even better than the previous one since we have also more informations in the first tweets (not only pertinence). We also tried to use the maximum instead of the sum, but this is not a good idea: the results were a lot worse compared to \ref{tab:pertinence}. Some statistics about this filtering method are shown in figures \ref{fig:filterdistribution} and \ref{fig:filterPrecision}.
