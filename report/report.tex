@@ -465,6 +465,43 @@ The first thing we wanted to do in this part is to distinguish tweets speaking a
 \item If is necessary to train a machine learning tool usually will be more accurate if built on a specific training set.
 \end{itemize}
 
+This filtering can be done in many ways:
+\begin{enumerate}
+\item Using a dictionary of interesting political words, and keep tweets that have a term in that dictionary. Problem:  how to define such dictionary?
+\item Using some semantic annotator, like TAGME, keeping phrases that have some annotation about politics. Actually also this approach needs the definition of a dictionary (of annotation this time), but the dictionary terms are potentially a lot less. TAGME has the possibility to compute a similarity score between topics (class \texttt{RelatednessCache}), so we need only to define some central topic for our analysis (like the names of the politicians, and the topic ``Politics'') and then compute scores against the topics found in a tweet. If the total score is over a certain threshold the tweet is kept, otherwise is discarded. See figure \ref{fig:filterPrecision} for further details on this threshold definition.
+\item Using a machine learning approach like for example a neural network. This approach has the drawback of defining a training set (thing that must be done by hand), but has the benefit of not needing a dictionary of important terms. The weights of the various terms are acquired automatically by the learning system.
+\end{enumerate}
+
+Of course the second approach is heavily influenced on how much precise is the annotator. In fact it's easy that many tweets speaking about politics are lost in this procedure.
+
+We had worked with the second approach defining by hand a set of interesting political topics (that are all the 7 politicians\footnote{The dataset we used is actually composed by the tweets coming by the users of 13 politicians. We don't know the other 6 politicians chosen by the Daniele De Sensi, Andrea Cicalese and Gabriele Piccinno's group.} plus other two): \texttt{Politica}, \texttt{Governo}, \texttt{Enrico Rossi}, \texttt{Silvio Berlusconi}, \texttt{Pierluigi Bersani}, \texttt{Beppe Grillo}, \texttt{Matteo Renzi}, \texttt{Gianfranco Fini}, \texttt{Italia dei Valori}. Notice that these are all TAGME anchors.
+
+For every tweet we computed the similarity score of every annotation against every topic in this list, summing up each contribution and then dividing by the number of annotations. We took this total sum as the political pertinence score. The best tweets found with this technique are shown in table \ref{tab:pertinence}.
+Not dividing by the number of annotations we get the longest tweets first (because longer tweets have on average more annotations), that is also a possibility, maybe even better than the previous one since we have also more informations in the first tweets (not only pertinence). We also tried to use the maximum instead of the sum, but this is not a good idea: the results were a lot worse compared to \ref{tab:pertinence}. Some statistics about this filtering method are shown in figures \ref{fig:filterdistribution} and \ref{fig:filterPrecision}.
+
+It is worth mentioning that using this dictionary based approach is, in certain sense ``dangerous'' because it's possible to forget (or to include) not significant topics that can alter the filtering. On the other hand it is very simple to realize this approach.
+
+\begin{table}[h]
+\centering
+    \begin{tabular}{| l | l | l | p{8cm} |} %serve per l'allineamento al centro
+    \hline
+Score & Timeline & UserID & Tweet \\ \hline
+482.3 & 1321127597 & 14819549 & \small{RT  Silvio Berlusconi si è dimesso.}\\
+482.3 & 1316267331 & 14723349 & \small{Regala una pompetta al signor berlusconi TA11}\\
+431.2 & 1271074275 & 29181795 & \small{Rifondazione comunista: Il CPN del 10-11 aprile}\\
+385.4 & 1320877499 & 5913352 & \small{Tremanti tra Monti e Tremonti}\\
+382.0 & 1259704223 & 147139427 & \small{Scalfaro in formissima!}\\
+357.1 & 1321105955 & 248610716 &  \small{RT  La rete si prepara a salutare Berlusconi}\\
+351.0 & 1320358483 & 189573329 & \small{Questa e' la sinistra italiana\dots}\\
+340.2 & 1300995181 & 10553182 & \small{E veltroni si incartò annozero}\\
+338.3 & 1307969128 & 260309439 & \small{È stato un referendum sul berlusconismo\dots}\\
+322.1 & 1306755453 & 250399937 & \small{Cosenza sì, centroSinistra ma vincerà il pdl\dots}\\
+ \hline
+    \end{tabular}
+    \caption{Table of the most pertinent political tweets.}
+    \label{tab:pertinence}
+\end{table}
+
 \begin{figure}
 \centering
 \begin{tikzpicture}
@@ -490,11 +527,9 @@ The first thing we wanted to do in this part is to distinguish tweets speaking a
 table[y index=0] {plot/filtering2.plot};
 \end{axis}
 \end{tikzpicture}
-\caption{Distribution of the filtering scores in a random set of 10000 tweets; on the $x$-axis there are some equal-length score ranges. Tweets with no annotations are not shown.}
+\caption{Distribution of the filtering scores in a random set of 10000 tweets; on the $x$-axis there are some equal-width score ranges. Tweets with no annotations are not shown.}
 \label{fig:filterdistribution}
 \end{figure}
-
-
 
 \begin{figure}
 \centering
@@ -516,47 +551,9 @@ table[y index=0] {plot/filtering2.plot};
 		\addlegendentry{recall}
 \end{axis}
 \end{tikzpicture}
-\caption{Precision and recall plot (for a set of about 1800 tweets) for the tweet filter.}
+\caption{Precision and recall plot (for a set of about 1800 tweets, chosen randomly among) for the tweet filter.}
 \label{fig:filterPrecision}
 \end{figure}
-
-
-This filtering can be done in many ways:
-\begin{enumerate}
-\item Using a dictionary of interesting political words, and keep tweets that have a term in that dictionary. Problem:  how to define such dictionary?
-\item Using some semantic annotator, like TAGME, keeping phrases that have some annotation about politics. Actually also this approach needs the definition of a dictionary (of annotation this time), but the dictionary terms are potentially a lot less. TAGME has the possibility to compute a similarity score between topics (class \texttt{RelatednessCache}), so we need only to define some central topic for our analysis (like the names of the politicians, and the topic ``Politics'') and then compute scores against the topics found in a tweet. If the total score is over a certain threshold the tweet is kept, otherwise is discarded. See figure \ref{fig:filterPrecision} for further details on this threshold definition.
-\item Using a machine learning approach like for example a neural network. This approach has the drawback of defining a training set (thing that must be done by hand), but has the benefit of not needing a dictionary of important terms. The weights of the various terms are acquired automatically by the learning system.
-\end{enumerate}
-
-Of course the second approach is heavily influenced on how much precise is the annotator. In fact it's easy that many tweets speaking about politics are lost in this procedure.
-
-We had worked with the second approach defining by hand a set of interesting political topics (that are all the 7 politicians\footnote{The dataset we used is actually composed by the tweets coming by the users of 13 politicians. We don't know the other 6 politicians chosen by the Daniele De Sensi, Andrea Cicalese and Gabriele Piccinno's group.} plus other two): \texttt{Politica}, \texttt{Governo}, \texttt{Enrico Rossi}, \texttt{Silvio Berlusconi}, \texttt{Pierluigi Bersani}, \texttt{Beppe Grillo}, \texttt{Matteo Renzi}, \texttt{Gianfranco Fini}, \texttt{Italia dei Valori}. Notice that these are all TAGME anchors.
-
-For every tweet we computed the similarity score of every annotation against every topic in this list, summing up each contribution and then dividing by the number of annotations. We took this total sum as the political pertinence score. The best tweets found with this technique are shown in table on figure \ref{tab:pertinence}.
-Not dividing by the number of annotations we get the longest tweets first (because longer tweets have on average more annotations), that is also a possibility, maybe even better than the previous one since we have also more informations in the first tweets (not only pertinence). We also tried to use the maximum instead of the sum, but this is not a good idea: the results were a lot worse compared to \ref{tab:pertinence}. Some statistics about this filtering method are shown in figures \ref{fig:filterdistribution} and \ref{fig:filterPrecision}.
-
-It is worth mentioning that using this dictionary based approach is, in certain sense ``dangerous'' because it's possible to forget (or to include) not significant topics that can alter the filtering. On the other hand it is very simple to realize this approach.
-
-\begin{table}[h]
-\centering
-    \begin{tabular}{| l | l | l | p{8cm} |} %serve per l'allineamento al centro
-    \hline
-Score & Timeline & UserID & Tweet \\ \hline
-482.3 & 1321127597 & 14819549 & \small{RT  Silvio Berlusconi si è dimesso.}\\
-482.3 & 1316267331 & 14723349 & \small{Regala una pompetta al signor berlusconi TA11}\\
-431.2 & 1271074275 & 29181795 & \small{Rifondazione comunista: Il CPN del 10-11 aprile}\\
-385.4 & 1320877499 & 5913352 & \small{Tremanti tra Monti e Tremonti}\\
-382.0 & 1259704223 & 147139427 & \small{Scalfaro in formissima!}\\
-357.1 & 1321105955 & 248610716 &  \small{RT  La rete si prepara a salutare Berlusconi}\\
-351.0 & 1320358483 & 189573329 & \small{Questa e' la sinistra italiana\dots}\\
-340.2 & 1300995181 & 10553182 & \small{E veltroni si incartò annozero}\\
-338.3 & 1307969128 & 260309439 & \small{È stato un referendum sul berlusconismo\dots}\\
-322.1 & 1306755453 & 250399937 & \small{Cosenza sì, centroSinistra ma vincerà il pdl\dots}\\
- \hline
-    \end{tabular}
-    \caption{Table of the most pertinent political tweets.}
-    \label{tab:pertinence}
-\end{table}
 
 
 
