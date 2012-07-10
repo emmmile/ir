@@ -321,7 +321,7 @@ We plotted the scores of the best \ha pairs sorted by their score, keeping also 
 \label{fig:loglogPlot}
 \end{figure}
 
-Observing the plots we can note how fast the frequency (and the score) of the \ha pairs decreases. The trend is near to a power law, a relation $f(x) = ax^k$; for this reason we plotted it also in a loglog space (see figure \ref{fig:loglogPlot}), where according to a power law it should be a line.
+Observing the plots we can note how fast the frequency (and the score) of the \ha pairs decreases. The trend is near to a power law, a relation $f(x) = ax^k$; for this reason we plotted it also in a loglog space (see plot \ref{fig:loglogPlot}), where according to a power law it should be a line.
 There is not simple relation between the number of tweets and the number of users, that used the \ha association, even if the trend seems to be the same.
 
 %Non ho idea di come piazzare queste due cose visto che adesso sono scollegate dal resto:
@@ -351,7 +351,7 @@ In fact if the hashtag is annotated with TAGME many times, in different tweets, 
 
 \subsection{Other meanings}
 We downloaded some hashtag definitions from \href{http://tagdef.com/}{tagdef.com}. Tagdef.com is a web server, that can be used for looking up an hashtag definition, and voting it.
-The server allows to create up to five definitions for distinct hashtag. On request, it is possible to obtain up the definitions for an hashtag, sorted by the votes of users, some examples in table \ref{tab:hashDef}. All twitter-users can contribute to grow the database of definitions (as in Wikipedia).
+The server allows to create up to five definitions for distinct hashtag. On request, it is possible to obtain up the definitions for an hashtag, sorted by the votes of users (see table \ref{tab:hashDef}). All twitter-users can contribute to grow the database of definitions (as in Wikipedia).
 We observe that the hashtags with definition are approximately a half of the total, so this can be considered a good instrument to compare the meanings (annotations) obtained by tweets with those extracted by the users definitions.
 This match is a possible test of reliability of the application of TAGME on the tweets. %ranking the annotations of user's definitions as the real semantic of hashtag.
 
@@ -387,7 +387,7 @@ The program works as follow:
 \item The ranking of the hashtags is shown to the user.
 \end{enumerate}
 
-This program in practice propose the ``best'' hashtags for a given text (table \ref{tab:tagger}), based on statistical informations derived from the whole set of tweets. This is a functionality that could be implemented in Twitter when a user write a sentence; the domain where the informations are obtained can of course be restricted to a subset of all the tweets of Twitter. For example  can be just the tweets of the user writing the sentence, or just the tweets in a certain window of time.  
+This program in practice propose the ``best'' hashtags for a given text (see table \ref{tab:tagger}), based on statistical informations derived from the whole set of tweets. This is a functionality that could be implemented in Twitter when a user write a sentence; the domain where the informations are obtained can of course be restricted to a subset of all the tweets of Twitter. For example  can be just the tweets of the user writing the sentence, or just the tweets in a certain window of time.  
 
 \begin{table}[h]
 \centering
@@ -477,7 +477,7 @@ Of course the second approach is heavily influenced on how much precise is the a
 We had worked with the second approach defining by hand a set of interesting political topics (that are all the 7 politicians\footnote{The dataset we used is actually composed by the tweets coming by the users of 13 politicians. We don't know the other 6 politicians chosen by the Daniele De Sensi, Andrea Cicalese and Gabriele Piccinno's group.} plus other two): \texttt{Politica}, \texttt{Governo}, \texttt{Enrico Rossi}, \texttt{Silvio Berlusconi}, \texttt{Pierluigi Bersani}, \texttt{Beppe Grillo}, \texttt{Matteo Renzi}, \texttt{Gianfranco Fini}, \texttt{Italia dei Valori}. Notice that these are all TAGME anchors.
 
 For every tweet we computed the similarity score of every annotation against every topic in this list, summing up each contribution and then dividing by the number of annotations. We took this total sum as the political pertinence score. The best tweets found with this technique are shown in table \ref{tab:pertinence}.
-Not dividing by the number of annotations we get the longest tweets first (because longer tweets have on average more annotations), that is also a possibility, maybe even better than the previous one since we have also more informations in the first tweets (not only pertinence). We also tried to use the maximum instead of the sum, but this is not a good idea: the results were a lot worse compared to \ref{tab:pertinence}. Some statistics about this filtering method are shown in figures \ref{fig:filterdistribution} and \ref{fig:filterPrecision}.
+Not dividing by the number of annotations we get the longest tweets first (because longer tweets have on average more annotations), that is also a possibility, maybe even better than the previous one since we have also more informations in the first tweets (not only pertinence). We also tried to use the maximum instead of the sum, but this is not a good idea: the results were a lot worse, compared to results in table \ref{tab:pertinence}. Some statistics about this filtering method are shown in histogram \ref{fig:filterdistribution} and plot \ref{fig:filterPrecision}, that show the distribution of tweets over score range and the precision and recall of a linear classifier based on filter score.
 
 
 It is worth mentioning that using this dictionary based approach is, in certain sense ``dangerous'' because it's possible to forget (or to include) not significant topics that can alter the filtering. On the other hand it is very simple to realize this approach.
