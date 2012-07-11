@@ -50,7 +50,7 @@
 \label{sec:intro}
 The purpose of this project is to extract semantic information from a set of tweets: tweets are short texts or phrases written by the Twitter users. In this work we have to deal both with semi-structured and unstructured data, since the informations we manipulate are stored in JSON format, but the tweet text is of course a non structured kind of data.
 %In addition to the problem of manipulating unstructured data, an other problem, that we must considered, is that of retrieve the information from the huge amount of data.
-The size of the data is very big and, for storing tweets of some hundreds of thousands of users are necessary many GBs of space. Moreover, given the nature of the data, it is very difficult to make analysis that are different from the syntactical one.
+The size of the data is very big and, for storing tweets of some thousands of users are necessary many GBs of space. Moreover, given the nature of the data, it is very difficult to make analysis that are different from the syntactical one.
 
 For these reasons, before using the dataset for obtaining semantic information, it's necessary to process the data several times, using filters and clustering tools. Our purposes are many and range over a wide variety of fields:
 
@@ -118,12 +118,12 @@ So we have a list of pairs \textit{(user, list of politicians)}, that can be eas
 \caption{Statistics of the users of the first dataset. Remember that the total number of politicians is 7. We curiously found that the politician 14078646 (Idvstaff) follows the politician 19067940 (beppe\_grillo).}
 \end{table}
 
-This part, and also others, has been developed in python (see script \texttt{graph.py}).
+This part, as many others, has been developed in python (see script \texttt{graph.py}).
 
 \subsection{Further work about the graph}
 The informations we have at our disposal are limited to a set of seven politicians and their followers. The directed edges of this graph are important, because they represent a contact between users. Most connected parts of the graph correspond to ``communities'' of users. We can exploit the structure of this graph in order to have a score similar to PageRank. This score can be used in different cases; the basic idea is that a term is more relevant if it appears in the tweets of an important user (in terms of this score).
 
-Moreover this kind of reasoning can be extended if we consider not only the direct connections\footnote{Connection given by the fact that an user follows another.}, but also connections given by conversations (retweets and replies, see also \ref{fig:twitterGraph}) and citations (tweets containing \emph{``@user''}).
+Moreover this kind of reasoning can be extended if we consider not only the direct connections\footnote{Connection given by the fact that an user follows another.}, but also connections given by conversations (retweets and replies, see also figure \ref{fig:twitterGraph}) and citations (tweets containing \emph{``@user''}).
 These informations can be used to build new levels of connection between users or to weight the existing ones.
 
 \begin{figure}[htbp]
@@ -140,12 +140,12 @@ These informations can be used to build new levels of connection between users o
     \caption{Example of a twitterGraph (jdemond's graph: @jdemond's Twitter Conversation Network), result of Cate Huston's work \cite{huston}.}
     \label{fig:twitterGraph}
    \end{subfigure}
-   \caption{Examples of connection-graphs build over users-connections.}
+   \caption{Examples of connection-graphs built over users-connections.}
   \label{fig:graph}
 \end{figure}
 
 \subsection{The graph of the terms}
-As just introduced Twitter makes possible to build conversations among users. The metadata associated to a tweet contain the necessary informations to build these conversations, that can be then analysed and decomposed into words.
+As just introduced Twitter makes possible to build conversations among users. The metadata associated to a tweet contain the necessary informations to rebuild these conversations, that can be further analysed and decomposed into words.
 
 The way of utilization, the frequency and the association of words, hashtags, citations, links, inside the tweets, can give sufficient informations for developing graphs also on the terms (see figure \ref{fig:tweetSpectrum}). If these informations, about the words used by the community, are stored and organized chronologically, we can observe the different terms usage during time (figure \ref{fig:twitterStreamGraphs}).
 
@@ -172,11 +172,11 @@ This is outside our goals, also for the lack of informations in the datasets at 
 
 \section{Tweets annotation}
 \label{sec:tagme}
-We have used \href{http://tagme.di.unipi.it/}{TAGME} to annotate tweets, associating some topics to each tweets of the dataset. The topics is associated to the tweets only of the annotation has rho greater than a default threshold, with value 0.2.
+We have used \href{http://tagme.di.unipi.it/}{TAGME} to annotate tweets, associating some topics to each tweets of the dataset. The topics are associated to the tweets only if the annotation has $\rho$ greater than a default threshold, with value 0.2.
 The tweets, before being processed with TAGME, are cleaned by urls and quotes (so expressions of the type \textit{@user}). This process is necessary for making tweets more similar to a sentence.
 It could be useful to do analysis about tweets language, for rejecting those not supported by TAGME and indicating to it the language to using for the annotation.
 We have done a simplification in the analysis, assuming that all tweets were written in Italian (only a small percentage of those uses a different language).
-An additional preprocessing that we have done, is the replacement of the HTML character codes (like like for example, \textsl{\&\#N;}, where \textit{N} is a number) with its unicode character.
+An additional preprocessing that we have done, is the replacement of the HTML character codes (like for example \texttt{\&\#233;} that corresponds to ``\'e'') with its unicode character.
 
 
 \section{Hashtags semantic}
@@ -384,10 +384,10 @@ The program works as follow:
 \begin{enumerate}
 \item The input phrase is tagged using TAGME. The output is a set of annotations $a_1, a_2,\ldots, a_n$.
 \item For each annotation $a_i$ are selected the relative hashtags with highest $\score(h,a)$. If an hashtag is selected many times, the scores are summed up.
-\item The ranking of the hashtags is shown to the user.
+\item The ranking of these hashtags is shown to the user.
 \end{enumerate}
 
-This program in practice propose the ``best'' hashtags for a given text (see table \ref{tab:tagger}), based on statistical informations derived from the whole set of tweets. This is a functionality that could be implemented in Twitter when a user write a sentence; the domain where the informations are obtained can of course be restricted to a subset of all the tweets of Twitter. For example  can be just the tweets of the user writing the sentence, or just the tweets in a certain window of time.  
+This program in practice propose the ``best'' hashtags for a given text (see table \ref{tab:tagger}), based on statistical informations derived from the whole set of tweets. This is a functionality that could be implemented in Twitter when a user write a sentence; the domain where the informations are obtained can be of course restricted to a subset of all the tweets of Twitter. For example it can be just the tweets of the user writing the sentence, or just the tweets in a certain window of time.  
 
 \begin{table}[h]
 \centering
