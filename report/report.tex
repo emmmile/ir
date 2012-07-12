@@ -48,7 +48,7 @@
 
 \section{Introduction}
 \label{sec:intro}
-The purpose of this project is to extract semantic information from a set of tweets: tweets are short texts or phrases written by the Twitter users. In this work we have to deal both with semi-structured and unstructured data, since the informations we manipulate are stored in JSON format, but the tweet text is of course a non structured kind of data.
+The purpose of this project is to extract semantic information from a set of tweets: tweets are short texts or phrases written by the Twitter users. In this work we have to deal both with semi-structured and unstructured data, since the informations we manipulate are stored in JSON format, but the tweet text is a non structured kind of data.
 %In addition to the problem of manipulating unstructured data, an other problem, that we must considered, is that of retrieve the information from the huge amount of data.
 The size of the data is very big and, for storing tweets of some thousands of users are necessary many GBs of space. Moreover, given the nature of the data, it is very difficult to make analysis that are different from the syntactical one.
 
@@ -95,7 +95,7 @@ These users are the followers of 13 politicians (the 7 of the initial dataset an
 
 
 
-\section{The users graph}
+\section{Twitter graphs}
 \label{sec:graph}
 Here we wanted analyse the structure of the users graph. In particular we are interested in finding the users that follows more than one politician. For this purpose we ``inverted'' the graph file given in the first data set: instead of having for every politician the list of users that are him followers, we create, for every user, the list of politicians followed by that user.
 So we have a list of pairs \textit{(user, list of politicians)}, that can be easily sorted on the politicians list length in order to view the users that follows $x$ politicians. We obtained the following results on the first data set:
@@ -120,7 +120,7 @@ So we have a list of pairs \textit{(user, list of politicians)}, that can be eas
 
 This part, as many others, has been developed in python (see script \texttt{graph.py}).
 
-\subsection{Further work about the graph}
+\subsection{Graphs of users}
 The informations we have at our disposal are limited to a set of seven politicians and their followers. The directed edges of this graph are important, because they represent a contact between users. Most connected parts of the graph correspond to ``communities'' of users. We can exploit the structure of this graph in order to have a score similar to PageRank. This score can be used in different cases; the basic idea is that a term is more relevant if it appears in the tweets of an important user (in terms of this score).
 
 Moreover this kind of reasoning can be extended if we consider not only the direct connections\footnote{Connection given by the fact that an user follows another.}, but also connections given by conversations (retweets and replies, see also figure \ref{fig:twitterGraph}) and citations (tweets containing \emph{``@user''}).
@@ -144,7 +144,7 @@ These informations can be used to build new levels of connection between users o
   \label{fig:graph}
 \end{figure}
 
-\subsection{The graph of the terms}
+\subsection{Graphs of terms}
 As just introduced Twitter makes possible to build conversations among users. The metadata associated to a tweet contain the necessary informations to rebuild these conversations, that can be further analysed and decomposed into words.
 
 The way of utilization, the frequency and the association of words, hashtags, citations, links, inside the tweets, can give sufficient informations for developing graphs also on the terms (see figure \ref{fig:tweetSpectrum}). If these informations, about the words used by the community, are stored and organized chronologically, we can observe the different terms usage during time (figure \ref{fig:twitterStreamGraphs}).
@@ -185,7 +185,7 @@ In this part we used the tweets from the users of the second dataset, because it
 We proceeded in the following steps:
 
 \begin{enumerate}
-\item Select only tweets that contains at least an hashtag. This has been done with a simple bash command. The tweets those use at least one hashtag are about 16\% of the total (about 3.4 millions over 21).
+\item Select only tweets that contains at least an hashtag. This has been done with a simple bash command. The tweets those use at least one hashtag are about 16\% of the total (about 3.4 millions over 21), as another study confirms \cite{tagger}.
 \item Filter only tweets that has at least one annotation. This has been done with the script \texttt{tweetsFilter.py}, which opens both the tweet file and the annotated one, discarding tweets with no annotation in the second file. This filtering further reduce the number of tweets from 3.4 millions to 1.9 millions.
 \item Collect for every user all the pairs \ha, where $h$ is an hashtag and $a$ an annotation. If for user $u$ exist such a pair, means that $u$ wrote some tweets where $h$ appear as hashtag, and these tweets are annotated with $a$. 
 %What relation there is between an hashtag and an annotation, \ha? Intuitively how much near is the meaning of hashtag $h$ and that of annotation $a$.
@@ -210,11 +210,11 @@ The other two steps instead require to build some kind of dictionary containing 
 
 \subsection{How the merge works}
 \label{sec:merge}
-One fundamental step in the previous procedure is how to merge together informations coming from different users into a single score. We assumed three possible score measures that are very simple to calculate and give a base for furter reasoning. They are, for a fixed pair $\langle h,a \rangle$, (hashtag, annotation):
+One fundamental step in the previous procedure is how to merge together informations coming from different users into a single score. We assumed three possible score measures that are very simple to calculate and give a base for further reasoning. They are, for a fixed pair $\langle h,a \rangle$, (hashtag, annotation):
 \begin{enumerate}
-\item the user count $u(h,a)$, that is simply the number of users that used the pair $\langle h,a \rangle$ in at least one tweet, indifferently from the number of these tweets. Having a high $u(h,a)$ is an indication of the popularity of the pair $\langle h,a \rangle$: the hashtag $h$ is used by many users with meaning $a$.
+\item the user count $u(h,a)$, that is the number of users that used the pair $\langle h,a \rangle$ in at least one tweet, indifferently from the number of these tweets. Having a high $u(h,a)$ is an indication of the popularity of the pair $\langle h,a \rangle$: the hashtag $h$ is used by many users with meaning $a$.
 
-\item the total number of tweets where the $\langle h,a \rangle$ pair is used, disregaring any information about the users (i.e. the previous indicator). We will indicate this number with $\mathcal{F}(h,a)$. This can be easily calculated if $w(u,h,a)$ simply represent the number of tweets written by $u$, where the pair $\langle h,a \rangle$ is used. In formulas:
+\item the total number of tweets where the $\langle h,a \rangle$ pair is used, disregaring any information about the users (i.e. the previous indicator). We will indicate this number with $\mathcal{F}(h,a)$. This can be easily calculated if $w(u,h,a)$ represent the number of tweets written by $u$, where the pair $\langle h,a \rangle$ is used. In formulas:
 \begin{equation}
 \label{eqn:frequency}
 \mathcal{F}(h,a) = \sum_{u} f(u,h,a)
@@ -232,7 +232,7 @@ It's clear that the last two measures are strongly related, and in general they 
 \label{eqn:step}
 u(h,a) = \sum_{u} \boldsymbol{1}_{(0,\infty)}\left( f(u,h,a) \right)
 \end{equation}
-Where $ \boldsymbol{1}_{(0,\infty)}(x) $ is the step function returning 1 only for values greather than 0. This clearly holds because if $ f(u,h,a) $ is greather than 0 means that user $u$ wrote at least one tweet where association $ (h,a) $ exists. The step function makes this contribution count as one.
+Where $ \boldsymbol{1}_{(0,\infty)}(x) $ is the step function returning 1 only for values greather than 0. This holds because if $ f(u,h,a) $ is greather than 0 means that user $u$ wrote at least one tweet where association $ (h,a) $ exists. The step function makes this contribution count as one.
 The measure $\mathcal{F}(h,a)$ (equation \ref{eqn:frequency}) is similar but with a linear function in place of $\boldsymbol{1}_{(0,\infty)}(x)$.
 Having in mind this consideration one can also observe that: %So how to combine these possibilities in a single score?
 
@@ -252,7 +252,7 @@ A possible idea is to use a different function in equation \ref{eqn:step} (somet
 
 Notice that if the logarithm in equation \ref{eqn:score} is in base 2 and the weights used are the number of tweets (so $w(u,h,a) = f(u,h,a)$), the result of this score is always between $u(h,a)$ and $\mathcal{F}(h,a)$, as we wanted.
 In fact the argument of the logarithm will be one if there are no tweets for user $u$ containing the hashtag $h$ with meaning $a$; in this case the contribution to the score is zero.
-Otherwise $1 + f(u,h,a)$ will always be greater or equal to two: in this case each tweet contributes at least as 1 in the final score (so it can't be smaller than $u(h,a)$), but for sure it contributes less than $f(u,h,a)$ because $\log( 1 + x ) < x$, for $x \geq 1$.
+Otherwise $1 + f(u,h,a)$ will always be greater or equal to two: in this case each tweet contributes at least as 1 in the final score (so it can't be smaller than $u(h,a)$), but for sure it contributes less than $f(u,h,a)$ because $\log( 1 + x ) < x$, for $x \geq 1$. An example of this score method is shown briefly in table \ref{tab:score}.
 
 \begin{table}[h]
 \centering{
@@ -266,6 +266,7 @@ example of $f(u,h,a)$ weights for 20 users & $u(h,a)$ & $\score(h,a)$ & $\mathca
 \end{tabular}
 }
 \caption{An example of the 3 score measures. Notice how, in the last two cases $\score(h,a)$ increases while $\mathcal{F}(h,a)$ remain constant. The difference in the two cases is that in the second row we have a high spike in the number of messages by a certain user, while in the third row, although the total number of tweets is the same, the use of hashtag $h$ (with meaning $a$) is better balanced among the users.}
+\label{tab:score}
 \end{table}
 
 
@@ -347,6 +348,8 @@ There is not simple relation between the number of tweets and the number of user
 A so unbalanced distribution of the frequency function of \ha pairs has repercussions on the semantic association itself. To have many tweets (thousands) containing the same hashtag, allows to have more text associated to it and, consequently, to have better semantic annotation through TAGME.
 In fact if the hashtag is annotated with TAGME many times, in different tweets, possible TAGME's mistakes are lessened because they are ``averaged''.
 
+Notice also that we didn't solve the problem of the spamming. This can be also viewed in plot \ref{fig:plotFrequency}, where the high spikes in the frequency corresponds to pairs like $\langle \#lastfm, Last.fm \rangle$, $\langle \#toscana, Toscana \rangle$, $\langle \#readcast, Scribd \rangle$ that are caused by automatic services that post on twitter the activities of a limited number of users (the Last.fm peak is actually registered also if the number of users is sensibly lower than its neighbours in the plot!).
+
 
 
 \subsection{Other meanings}
@@ -357,14 +360,14 @@ This match is a possible test of reliability of the application of TAGME on the 
 
 \begin{table}[h]
 \centering
-    \begin{tabular}{ | l | p{4cm} | p{4cm} | p{4cm} |}
+    \begin{tabular}{ | l | p{3.9cm} | p{3.9cm} | p{3.9cm} |}
     \hline
 Hashtag & First definition & Second definition & Third definition \\ \hline
 10dec & \footnotesize{Protests in Russia against unfair elections} & \footnotesize{Something to do with Russian anti-putin demonstrations?} & \footnotesize{A tweet showing that it's the 10th of December}\\
 %22agustos & \footnotesize{The date in which internet will supposedly die in Turkey, by implementation of a new state filter} & \footnotesize{And bring us in line with china, north korea, iran, saudi arabia, cuba, and such} & \footnotesize{It is august 22nd in turkish. A new law will be applied from then on, increasing internet filtering}\\
-26s & \footnotesize{Elecciones parlamentarias en VENEZUELA 2010, mikemike2020} & \footnotesize{Elecciones parlamentarias en VENEZUELA 2010, news \& comments by mikemike2020} & \footnotesize{Importantisimas elecciones para el futuro de VENEZUELA no dejes que los demás decidan por ti, VOTA}\\
+%26s & \footnotesize{Elecciones parlamentarias en VENEZUELA 2010, mikemike2020} & \footnotesize{Elecciones parlamentarias en VENEZUELA 2010, news \& comments by mikemike2020} & \footnotesize{Importantisimas elecciones para el futuro de VENEZUELA no dejes que los demás decidan por ti, VOTA}\\
 aa & \footnotesize{Alcoholics Anonymous} & \footnotesize{African american } & \footnotesize{All Americans}\\
-ac & \footnotesize{Atlantic City} & \footnotesize{AC Green(40 year old virgin)} &  \footnotesize{Air conditioner}\\
+%ac & \footnotesize{Atlantic City} & \footnotesize{AC Green(40 year old virgin)} &  \footnotesize{Air conditioner}\\
 %agt & \footnotesize{America's Got Talent = a favorite new show on \#NBC television network that is teamed up in 2010 with YouTube allowing viewers to VOTE online for their favorite NEW TALENT} & \footnotesize{Created by @gobig3 to explain "Aint got time"   www.gobig3.bigcartel.com} & \footnotesize{Arabs Got Talent}\\
 amore & \footnotesize{L'Amore non esiste, è un'invenzione dell'uomo a fini positivi, cioè per creare unione, famiglia, ecc. } & \footnotesize{Love each other as you'd like to be loved in return. This hashtag originated from\dots} & \footnotesize{Love for Alex Reid}\\
 aps & \footnotesize{Atención Primaria en Salud} & \footnotesize{Atlanta Public Schools in Atlanta, Georgia} & \footnotesize{Amigos por siempre}\\
@@ -387,7 +390,9 @@ The program works as follow:
 \item The ranking of these hashtags is shown to the user.
 \end{enumerate}
 
-This program in practice propose the ``best'' hashtags for a given text (see table \ref{tab:tagger}), based on statistical informations derived from the whole set of tweets. This is a functionality that could be implemented in Twitter when a user write a sentence; the domain where the informations are obtained can be of course restricted to a subset of all the tweets of Twitter. For example it can be just the tweets of the user writing the sentence, or just the tweets in a certain window of time.  
+This program in practice propose the ``best'' hashtags for a given text (see table \ref{tab:tagger}), based on statistical informations derived from the whole set of tweets. This is a functionality that could be implemented in Twitter when a user write a sentence; the domain where the informations are obtained can be restricted to a subset of all the tweets of Twitter. For example it can be just the tweets of the user writing the sentence, or just the tweets in a certain window of time.
+
+After we implemented this little tagging utility we discovered a previous study \cite{tagger} that develop this idea without the use of semantic annotators, but with using a Bayes model over a certain dictionary of words.
 
 \begin{table}[h]
 \centering
@@ -415,14 +420,14 @@ This program in practice propose the ``best'' hashtags for a given text (see tab
 				}\\
 				\hline
     \end{tabular}
-    \caption{Examples of the hashtagger use. The hashtags are sorted by the score (only the first 2 score are reported). At every tweet can be associated more annotations $a_i$, then the respective hashtags in the pairs $\langle a_i, h \rangle$ with higher score are considered.}
+    \caption{Examples of the hashtagger use. The hashtags are sorted by the score (only the first 2 scores are reported). At every tweet can be associated more annotations $a_i$, then the respective hashtags in the pairs $\langle a_i, h \rangle$ with higher score are considered.}
     \label{tab:tagger}
 \end{table}
 
 
 \section{Sentiment Analysis}
 \label{sec:sentiment}
-The basic idea we wanted to develop here is to somehow calculate similarity between users and politicians. The na\"ive approach consist in making a comparison in the terms/topics used by them, but this does not take in consideration in \textit{which way} a user speak about something.
+The basic idea we wanted to develop here is to somehow calculate similarity between users and politicians. The na\"ive approach consist in making a comparison in the terms/topics used by them, but this does not take in consideration in \textit{which way} a user speak about something (see figure \ref{fig:berlusconi}).
 
 \begin{figure}[h]
 \centering{
@@ -436,6 +441,7 @@ Berlusconi: ``sono il miglior presidente del consiglio dalla seconda guerra mond
 }
 \caption{An example of two phrases that, despite having many common terms, describe very different messages.
 Here, also using TAGME we can't resolve the problem, and a program that calculates user similarity only with these informations will not get the differences in the two expressions.}
+\label{fig:berlusconi}
 \end{figure}
 
 We need in other words, informations about the sentiment of a user when speaking of a certain topic. This is often called \textit{polarity} and can be represented numerically in many ways, like for example: 
@@ -445,12 +451,12 @@ We need in other words, informations about the sentiment of a user when speaking
 \item same as the previous but with another value indicating neutrality.
 \end{itemize}
 
-Of course all these approaches are possible, and the one to choose mainly depends on the application. We will discuss in a subsequent section how we can use an information like this to calculate similarity between users.
+All these approaches are possible, and the one to choose mainly depends on the application. We will discuss in a subsequent section how we can use an information like this to calculate similarity between users.
 
 We want only to add that such a tool is very difficult to implement, and actually we did not find anything that perfectly fits our needs: almost all the tools we found are developed for the English language. The only multi-language tools we found are \cite{sentiment}, \cite{tromp} and \cite{Kin}.
 
 Moreover it is difficult to extract topics from a phrase and have a good polarity estimation for a full phrase. We would need polarity estimation for a certain topic inside a phrase, thing that seems not feasible at the moment, but we wanted anyway develop something in this sense.
-For these purposes the most of the approaches are based on machine learning techniques \cite{sentiment, baccianella}.
+For these purposes the most of the approaches are based on machine learning techniques \cite{sentiment, baccianella, tagger}.
 
 This problem, not simple to solve, arises from the fact that many topics are treated in the same sentence and their respective polarity can be different: at the same time a person can speak good of a certain topic and bad of another. It is not possible to split tweets based on the punctuation, because the same phrase can contain many topics as well. For solving this problem we should use tools of logical and grammatical analysis (part-of-speech tagging \cite{pos}). These would allow to find links among terms, negations and other constructs that are important for the meaning of the sentence and its polarity.
 It's important to notice that tweets aren't simple and this kind of analysis becomes more difficult compared to a standard linear text analysis (for example because of the use of quotes, hashtags, abbreviations, etc). 
@@ -458,9 +464,10 @@ It's important to notice that tweets aren't simple and this kind of analysis bec
 %Maybe in the future when this kind of tools will exist (or they will be more precise), our approach can be used to effectively compute similarity scores among users.
 
 \subsection{Tweet filtering}
+\label{sec:tweetFiltering}
 The first thing we wanted to do in this part is to distinguish tweets speaking about politics from the other ones. In fact we are interested in comparing users on their political opinions, not on every possible other topic. This have some advantages:
 \begin{itemize}
-\item Greatly reduces the input data size. Of course not every tweet speaks about politics.
+\item Greatly reduces the input data size because not every tweet speaks about politics.
 \item This gives a better approximation of the similarity score of the political point of view of a user. In fact users with a high (political) similarity score could be very far in other contexts (because of opinions about cinema for example).
 \item If is necessary to train a machine learning tool usually will be more accurate if built on a specific training set.
 \end{itemize}
@@ -472,17 +479,8 @@ This filtering can be done in many ways:
 \item Using a machine learning approach like for example a neural network. This approach has the drawback of defining a training set (thing that must be done by hand), but has the benefit of not needing a dictionary of important terms. The weights of the various terms are acquired automatically by the learning system.
 \end{enumerate}
 
-Of course the second approach is heavily influenced on how much precise is the annotator. In fact it's easy that many tweets speaking about politics are lost in this procedure.
 
-We had worked with the second approach defining by hand a set of interesting political topics (that are all the 7 politicians\footnote{The dataset we used is actually composed by the tweets coming by the users of 13 politicians. We don't know the other 6 politicians chosen by the Daniele De Sensi, Andrea Cicalese and Gabriele Piccinno's group.} plus other two): \texttt{Politica}, \texttt{Governo}, \texttt{Enrico Rossi}, \texttt{Silvio Berlusconi}, \texttt{Pierluigi Bersani}, \texttt{Beppe Grillo}, \texttt{Matteo Renzi}, \texttt{Gianfranco Fini}, \texttt{Italia dei Valori}. Notice that these are all TAGME anchors.
-
-For every tweet we computed the similarity score of every annotation against every topic in this list, summing up each contribution and then dividing by the number of annotations. We took this total sum as the political pertinence score. The best tweets found with this technique are shown in table \ref{tab:pertinence}.
-Not dividing by the number of annotations we get the longest tweets first (because longer tweets have on average more annotations), that is also a possibility, maybe even better than the previous one since we have also more informations in the first tweets (not only pertinence). We also tried to use the maximum instead of the sum, but this is not a good idea: the results were a lot worse, compared to results in table \ref{tab:pertinence}. Some statistics about this filtering method are shown in histogram \ref{fig:filterdistribution} and plot \ref{fig:filterPrecision}, that show the distribution of tweets over score range and the precision and recall of a linear classifier based on filter score.
-
-
-It is worth mentioning that using this dictionary based approach is, in certain sense ``dangerous'' because it's possible to forget (or to include) not significant topics that can alter the filtering. On the other hand it is very simple to realize this approach.
-
-\begin{table}[h]
+\begin{table}[t]
 \centering
     \begin{tabular}{| l | l | l | p{8cm} |} %serve per l'allineamento al centro
     \hline
@@ -499,12 +497,14 @@ Score & Timeline & UserID & Tweet \\ \hline
 322.1 & 1306755453 & 250399937 & \small{Cosenza sì, centroSinistra ma vincerà il pdl\dots}\\
  \hline
     \end{tabular}
-    \caption{Table of the most pertinent political tweets.}
+    \caption{Table of the most pertinent political tweets. For each tweet we computed the sum of the relatedness scores with the set of political topics (see section \ref{sec:tweetFiltering}); this sum has been divided by the number of annotations in the tweet.}
     \label{tab:pertinence}
 \end{table}
 
-\begin{figure}
+
+\begin{figure}[p]
 \centering
+\begin{subfigure}{\textwidth}
 \begin{tikzpicture}
 \pgfkeys{/pgf/number format/.cd,fixed,fixed zerofill,precision=0}
 \begin{axis}[
@@ -520,9 +520,9 @@ Score & Timeline & UserID & Tweet \\ \hline
 	},
 	%xticklabel={$[\pgfmathprintnumber[fixed]\tick,\cdot)$},
 	%xticklabel=\pgfmathprintnumber\tick--\pgfmathprintnumber\nexttick
-	height=0.45\textheight,
+	height=0.4\textheight,
 	width=\textwidth,
-	ylabel=number of tweets,
+	ylabel=number of tweets
 ]
 \addplot+[hist={bins=10}]
 table[y index=0] {plot/filtering2.plot};
@@ -530,32 +530,49 @@ table[y index=0] {plot/filtering2.plot};
 \end{tikzpicture}
 \caption{Distribution of the filtering scores in a set of 10000 tweets chosen randomly from 21.6 millions of tweets (second dataset); on the $x$-axis there are some equal-width score ranges. Tweets with no annotations are not shown.}
 \label{fig:filterdistribution}
-\end{figure}
+\end{subfigure}
 
-\begin{figure}
+\begin{subfigure}{\textwidth}
 \centering
 \begin{tikzpicture}
 \begin{axis}[
   xlabel=score's threshold,
-  height=0.45\textheight,
+  ylabel=measure value,
+  height=0.4\textheight,
 	width=\textwidth,
 	xmin=0,
 	xmax=2400,
 	ymin=0,
 	ymax=1,
-	legend pos=south west
+	legend pos=south west,
+  patch type=quadratic spline,
 ]
 		
 		\addplot[color=red,smooth]   table[x index=0,y index=1] {plot/precision-recall.plot};
 		\addlegendentry{precision}
 		\addplot[color=green,smooth]   table[x index=0,y index=2] {plot/precision-recall.plot};
 		\addlegendentry{recall}
+		\addplot[color=blue,smooth]   table[x index=0,y expr=2*\thisrow{precision}*\thisrow{recall}/(\thisrow{precision}+\thisrow{recall})] {plot/precision-recall.plot};
+		\addlegendentry{F measure}
 \end{axis}
 \end{tikzpicture}
-\caption{Precision and recall plot (for a set of about 1800 tweets, chosen randomly from a set of 1.8 millions of tweets with at least one hashtag and one annotation) for the tweet filter.
-The used dataset was classified manually, adding a value on every tweet, to indicate if the tweet talks, or not, about politcs.}
+\caption{Precision and recall plot (for a set of about 1800 tweets, chosen randomly from a set of 1.9 millions of tweets with at least one hashtag and one annotation) for the tweet filter.
+This dataset was classified manually, adding a value on every tweet, to indicate if the tweet talks or not about politics. We found that the suggested threshold value is 535, that is where the precision equals the recall (or equivalently the maximum of the F measure).}
 \label{fig:filterPrecision}
+\end{subfigure}
 \end{figure}
+
+Of course the second approach is heavily influenced on how much precise is the annotator. In fact it's easy that many tweets speaking about politics are lost in this procedure.
+
+We had worked with the second approach defining by hand a set of interesting political topics (that are all the 7 politicians\footnote{The dataset we used is actually composed by the tweets coming by the users of 13 politicians. We don't know the other 6 politicians chosen by the Daniele De Sensi, Andrea Cicalese and Gabriele Piccinno's group.} plus other two): \texttt{Politica}, \texttt{Governo}, \texttt{Enrico Rossi}, \texttt{Silvio Berlusconi}, \texttt{Pierluigi Bersani}, \texttt{Beppe Grillo}, \texttt{Matteo Renzi}, \texttt{Gianfranco Fini}, \texttt{Italia dei Valori}. Notice that these are all TAGME anchors.
+
+For every tweet we computed the similarity score of every annotation against every topic in this list, summing up each contribution and then dividing by the number of annotations. We took this total sum as the political pertinence score. The best tweets found with this technique are shown in table \ref{tab:pertinence}.
+Not dividing by the number of annotations we got the longest tweets first (because longer tweets have on average more annotations), that is also a possibility, maybe even better than the previous one since we have also more informations in the first tweets (not only pertinence). We also tried to use the maximum instead of the sum, but this is not a good idea: the results were a lot worse, compared to results in table \ref{tab:pertinence}.
+
+Some statistics about this second filtering method (the sum without the division by the number of annotations) are shown in histogram \ref{fig:filterdistribution} and plot \ref{fig:filterPrecision}, that show the distribution of tweets over score range and the precision and recall of a linear classifier based on filter score.
+
+
+It is worth mentioning that using this dictionary based approach is, in certain sense ``dangerous'' because it's possible to forget (or to include) not significant topics that can alter the filtering. On the other hand it is very simple to realize this approach.
 
 
 \section{Sentiment Analysis purpose}
@@ -566,7 +583,7 @@ Having a tool for deciding polarity of tweets we can complete two very ambitious
 \item calculate a similarity score among different users, or politicians.
 \item combining the previous two points we can address many other interesting points: for example computing the sentiment of a whole twitter channel over a certain topic.
 \end{enumerate}
-In the following we will simply assume that $p(t,a)$ is the polarity for topic $a$ in tweet $t$, ranging from -1 to +1 (-1 means totally negative, 0 neutral, +1 totally positive). This is better for the aim of calculating the cosine similarity between the vectors representing the users, as explained below.
+In the following we will assume that $p(t,a)$ is the polarity for topic $a$ in tweet $t$, ranging from -1 to +1 (-1 means totally negative, 0 neutral, +1 totally positive). This is better for the aim of calculating the cosine similarity between the vectors representing the users, as explained below.
 
 \subsection{Users polarity}
 Calculating the overall polarity of a user over a certain topic is relatively easy, since one can simple calculate the sum over all tweets written by $u$. If the global polarity of user $u$ on topic $a$ is denoted by $P(a,u)$, we can say that: %in realta' si potrebbe fare anche una media di qualche tipo???
@@ -623,6 +640,13 @@ As said before the weight $w(u,a_i)$ gives more reliability to polarity of topic
 This means that, at the end, the two situations gives the same weighted polarity. This is meaningful when the polarity is in the range $[-1,1]$ because 0.01 means ``neutral'': that is speaking few (but ``positively'') of a certain topic is like speaking neutrally of that topic.
 If the polarity is in $[0,1]$, 0.01 means ``negative'', so speaking few (but ``positively'') of certain topic would be like speaking of it negatively, thing that we have to avoid.
 \end{itemize}
+
+
+
+\section{Conclusions}
+This is just an example of the many possibilities there are to extract knowledge from the huge data set in Twitter. We didn't deal with all the problematic aspects coming from the analysis of short texts from social networks (for example language and spam detection); moreover there is a number of metadatas, that are offered by Twitter, that makes further analysis feasible.
+
+Our work shows mainly what is possible to achieve with a semantic annotator like TAGME, in this area. An example is the hashtagger we realized, that can be a valid alternative to the method presented in \cite{tagger}. Additionally some approaches we presented can be extended with machine learning techniques (or combined together) in order to obtain even more powerful tools.
 
 \bibliographystyle{plain}
 \bibliography{report}

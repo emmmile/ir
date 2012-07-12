@@ -13,7 +13,7 @@ def isPolitical( line ):
 lines = open("precision-recall.txt").readlines()
 minScore = getScore( lines[0] )
 maxScore = getScore( lines[-1] )
-steps = [minScore + x * 0.05 * (maxScore - minScore) for x in range(0, 20)]
+steps = [minScore + x * 0.01 * (maxScore - minScore) for x in range(0, 100)]
 
 
 

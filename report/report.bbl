@@ -1,4 +1,4 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 
 \bibitem{baccianella}
 Stefano Baccianella, Andrea Esuli, and Fabrizio Sebastiani.
@@ -41,6 +41,10 @@ Cate Huston, Michael Weiss, and Morad Benyoucef.
 Gary King, Matthew Knowles, and Steven Melendez.
 \newblock Readme: Software for automated content analysis.
 \newblock 2010.
+
+\bibitem{tagger}
+Allie Mazzia and James Juett.
+\newblock Suggesting hashtags on twitter.
 
 \bibitem{pos}
 Helmut Schmid.
