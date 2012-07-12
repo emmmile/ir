@@ -11,7 +11,7 @@ import math
 class tagPrint(object):
 
 	def __init__(self, filename, onlyImportant,threshold):
-		self.filename = filename
+		self.filename = filename	# file : name.hashtagsUser
 		self.hashtags = dict()		# mapping hashtag -> topics
 		self.important = onlyImportant
 		self.threshold = threshold
@@ -26,7 +26,7 @@ class tagPrint(object):
 	def parse_data(self):
 		print( "Merging hashtag informations from {0}...".format(self.filename) )
 		for line in self.inFile:
-			tags = line.split( ' #' )			#userID (#tag (frequenza annotazione)+)+
+			tags = line.split( ' #' )			#line: userID (#tag (rho annotazione|) +)+
 			self.totalUsers += 1
 			
 			for t in tags[1:]:				#toglie l'userID e itera su "tag (frequenza annotazione)+"

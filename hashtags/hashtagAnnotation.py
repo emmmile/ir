@@ -7,6 +7,32 @@ import sys
 import codecs
 import toUnicode
 
+
+"""
+INPUT:
+  A file containing the tweets in the following format:		time[BLANK]userID[BLANK]textWithHashtags[NEWLINE]
+  For example (data/i3terroni-dataset/with-hashtags):
+  
+  1323335672	99997947	[Me ne frego io!!] Solo a Roma 10mila testamenti a favore di Cazzinger #dilloamonti #ICI
+  1323336521	99997947	#APSA protegge il Mattone di Dio! Al catasto molti mattoni non risultano... #dilloamonti #ICI
+  1323336802	99997947	Leggi un dossier sulla Chiesa e ti dai l'estrema unzione da solo! Amen #dilloamonti
+  ...
+  
+  The same annotated file, with format:				time[BLANK]userID[BLANK]#annotation@score...[NEWLINE]
+  For example (data/i3terroni-dataset/with-hashtags.annotations):
+  1323335672	99997947	#Roma@0.44241688
+  1323336521	99997947	#Catasto@0.29792827#Dio@0.20322153#Mattone@0.28075898#Mattone@0.27452058
+  1323336802	99997947	#Unzione degli infermi@0.55601376
+  ...
+  
+  
+  
+OUTPUT:
+  A file with the following format:				userID[BLANK](#hashtag[BLANK]score[BLANK]annotationID...)...[NEWLINE]
+  
+  This file has to be used as input for hashtagMerge.py, and it is saved in the same directory of the two input files.
+"""
+
 class tagAnnotation(object):
 
 	def __init__(self, filetext, fileannotation):
@@ -39,22 +65,28 @@ class tagAnnotation(object):
 		self.outFile.write(userID_old)
 		for t in hashtagAnn:				# scorre i tag dell'utente
 			if len( hashtagAnn[t] ):		# se ci sono annotazioni...
-				result = dict()			# creo un dizionario che ha annotazioni come chiavi
+				resultRhos = dict()		# creo un dizionario che ha annotazioni come chiavi
 								# e numero di tweet come valori
+				resultFreq = dict()
+				
 				for a in hashtagAnn[t]:
 					#XXX questo e' da usare nel caso il file annotato contenga anche il rho
 					key, rho = a.split('@')
-					result[key] = result.setdefault( key, 0.0 ) + float(rho)
+					resultRhos[key] = resultRhos.setdefault( key, 0.0 ) + float(rho)
 					#XXX altrimenti basta questa riga
-					#result[a] = result.setdefault( a, 0 ) + 1
+					resultFreq[key] = resultFreq.setdefault( key, 0 ) + 1
 				
-				resultList = []
-				for el in result:		# scorro il dizionario e creo una lista
+				toPrint = []			# questo contiene una rappresentazione testuale
+								# delle sommeRho e delle frequenze di tutte le annotazioni
+								# relative all'hashtag corrente, t
+				
+				for el in resultRhos:		# scorro il dizionario (uno vale l'altro) e creo una lista
 								# di stringhe "frequenza annotazione" che poi viene scritto su file
-					resultList.append( str( result[el] ) + ' ' + el )
+					toPrint.append( str( resultRhos[el] ) + ' ' + str( resultFreq[el] ) + ' ' + el )
+					
 				
-				#ogli coppia "frequenza annotazione" e' separata da |
-				self.outFile.write( unicode(" {0} {1}".format(t, '|'.join( resultList ) ), 'utf-8') )
+				#ogli coppia "sumRho frequenza annotazione" e' separata da |
+				self.outFile.write( unicode(" {0} {1}".format(t, '|'.join( toPrint ) ), 'utf-8') )
 		self.outFile.write("\n")
 
 
