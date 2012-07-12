@@ -8,6 +8,18 @@ import codecs
 from optparse import OptionParser #deprecated in 2.7 or newer
 import math
 
+
+
+"""
+INPUT:
+  A file containing the hashtag annotation informations as explained in hashtagAnnotation.py.  
+  
+OUTPUT:
+  A file with the following format:		hashtag[BLANK]annotation[BLANK]s=score[BLANK]annotation[BLANK]s=score...[NEWLINE]
+"""
+
+
+
 class tagMerge(object):
 
 	def __init__(self, filename, onlyImportant,threshold):
@@ -35,11 +47,11 @@ class tagMerge(object):
 				hashtag = tmp[0]			#prende "tag"
 				
 				#for pair in re.findall( '[\.\d]+ [^|]+', tmp[1] ):	#itera sulle coppie "frequenza annotazione"
-				for pair in tmp[1].split('|'):
-					couple = pair.split( None, 1 )
-					an = couple[1].rstrip()		#prende l'annotazione
-					#freq = int( couple[0] )	#XXX prende la frequenza nel caso sia un int
-					freq = float( couple[0] )	#XXX nel caso sia un float (somma dei rho)
+				for triple in tmp[1].split('|'):
+					fields = triple.split( None, 2 )
+					an = fields[2].rstrip()		#prende l'annotazione
+					freq = int( fields[1] )		#prende la frequenza
+					rhos = float( fields[0] )	#prende la somma dei 
 					self.totalTweets += freq
 					
 					if hashtag not in self.hashtags:	#non esiste hashtag nel dizionario
