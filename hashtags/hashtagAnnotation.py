@@ -29,6 +29,10 @@ INPUT:
   
 OUTPUT:
   A file with the following format:				userID[BLANK](#hashtag[BLANK]score[BLANK]annotationID...)...[NEWLINE]
+  For example (data/i3terroni-dataset/with-hashtags.hashtagUser):
+  
+  100110609 #whatsapp 0.4090909 1 Televideo|0.36914182 1 Apple|0.61621785 1 IPhone (famiglia) #pid 0.5399709 1 Il Popolo della Libertà
+  ...
   
   This file has to be used as input for hashtagMerge.py, and it is saved in the same directory of the two input files.
 """

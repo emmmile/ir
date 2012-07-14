@@ -5,6 +5,11 @@ import re
 import sys
 import codecs
 
+"""
+This script just take every line of an input file and convert avery html unicode character,
+for example &#x2665; or &#9829; becomes ♥.
+"""
+
 
 def replace( reMatchObject ):
 	out = ''

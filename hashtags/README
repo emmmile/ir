@@ -1,27 +1,3 @@
-parse.py		Takes as input a tweet file (see slides for the format) and returns a 3 files
-			which rows have the following format:
-				
-				file.text		tweetID  time  text
-				file.list		userID  (tweetID)+
-				file.hashtags		hashtag  (@userID (tweetID)+)+
-			
-			A part from the script is the same as parse_tweets.py by paurullan.
-			The most important difference is that here we consider only tweets that contains
-			hashtags.
-			
-			Usage:
-			
-			./parse.py /path/file.json
-			
-			Output:
-			
-			/path/file.json.text
-			/path/file.json.list
-			/path/file.json.hashtags
-			
-			as specified above.
-			
-=========================================================================================================
 
 hashtagAnnotation.py	Takes as input a tweet file (time userID textWithHashtag)
 			and a annotation file (time userID (#annotationID@freq)+)
